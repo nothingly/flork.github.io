@@ -153,5 +153,24 @@
   
   
   
+  <entry>
+    <title>Hexo-Fluid主题-给文章设置密码</title>
+    <link href="/2021/12/03/test/"/>
+    <url>/2021/12/03/test/</url>
+    
+    <content type="html"><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">  <script id="hbeData" type="hbeData" data-hmacdigest="e03b05229db81b97b2f135f9da01f760e9dec32f1047979fcbe7b86b19eb38d7">10d79030e8222445804370796b90fca169b2796a276913b7c1ca4281f96701e0b8c3f7473b54a2121905d3ff0c7889330f417c02b2599c2bf2306735e0852c3d24c0ab792490f8bb9d56341d6ad922286a4f6250e4fc86172717e9b3c1771cb1a213f5b4d639912f6d53c4661235673b</script>  <div class="hbe hbe-content">    <div class="hbe hbe-input hbe-input-default">      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好, 这里需要密码.</span>      </label>    </div>  </div></div><script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>私密文章</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
   
 </search>
