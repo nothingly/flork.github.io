@@ -1,0 +1,817 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="B612🚀">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="面试题01- 线程又几种创建方式和区别 继承 Thread 类 实现 Runnable 接口 实现 Callable 接口，并结合 Future 实现 通过线程池创建线程  02-你能说下synchronized和lock的区别吗03-set和list的区别List特点：元素有放入顺序，元素可重复 Set特点：元素无放入顺序，元素不可重复，重复元素会覆盖掉，（元素虽然无放入顺序，但是元素在set中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题">
+<meta property="og:url" content="https://lfrok.top/2022/11/27/Java/%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:site_name" content="Le Petit Prince">
+<meta property="og:description" content="面试题01- 线程又几种创建方式和区别 继承 Thread 类 实现 Runnable 接口 实现 Callable 接口，并结合 Future 实现 通过线程池创建线程  02-你能说下synchronized和lock的区别吗03-set和list的区别List特点：元素有放入顺序，元素可重复 Set特点：元素无放入顺序，元素不可重复，重复元素会覆盖掉，（元素虽然无放入顺序，但是元素在set中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-27T09:52:55.020Z">
+<meta property="article:modified_time" content="2022-11-27T10:33:46.965Z">
+<meta property="article:author" content="B612🚀">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>面试题 - Le Petit Prince</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lfrok.top","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>B-612</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/same/">
+                <i class="iconfont icon-twitch-fill"></i>
+                我们
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://pprince.top/bgc/bgc-2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="面试题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-27 17:52" pubdate>
+          2022年11月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          51 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">面试题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><h4 id="01-线程又几种创建方式和区别"><a href="#01-线程又几种创建方式和区别" class="headerlink" title="01- 线程又几种创建方式和区别"></a><strong>01- 线程又几种创建方式和区别</strong></h4><ul>
+<li>继承 Thread 类</li>
+<li>实现 Runnable 接口</li>
+<li>实现 Callable 接口，并结合 Future 实现</li>
+<li>通过线程池创建线程</li>
+</ul>
+<h4 id="02-你能说下synchronized和lock的区别吗"><a href="#02-你能说下synchronized和lock的区别吗" class="headerlink" title="02-你能说下synchronized和lock的区别吗"></a><strong>02-你能说下synchronized和lock的区别吗</strong></h4><h4 id="03-set和list的区别"><a href="#03-set和list的区别" class="headerlink" title="03-set和list的区别"></a><strong>03-set和list的区别</strong></h4><p>List特点：元素有放入顺序，元素可重复</p>
+<p>Set特点：元素无放入顺序，元素不可重复，重复元素会覆盖掉，（元素虽然无放入顺序，但是元素在set中的位置是有该元素的HashCode决定的，其位置其实是固定的，加入Set 的Object必须定义equals()方法 ，另外list支持for循环，也就是通过下标来遍历，也可以用迭代器，但是set只能用迭代，因为他无序，无法用下标来取得想要的值。）<br>3.Set和List对比：<br>Set：检索元素效率低下，删除和插入效率高，插入和删除不会引起元素位置改变。<br>List：和数组类似，List可以动态增长，查找元素效率高，插入删除元素效率低，因为会引起其他元素位置改变。</p>
+<h4 id="04-哪些情况索引失效"><a href="#04-哪些情况索引失效" class="headerlink" title="04-哪些情况索引失效"></a><strong>04-哪些情况索引失效</strong></h4><ul>
+<li>某个表中，有两列（id和c_id）都建了单独索引，下面这种查询条件不会走索引</li>
+<li>存在NULL值条件</li>
+<li>反过来当查询条件为非时，索引定位就困难了，执行计划此时可能更倾向于全表扫描，这类的查询条件有：&lt;&gt;、NOT、in、not exists</li>
+<li>当使用模糊搜索时，like 前置通配符 %</li>
+<li>条件上包括函数</li>
+<li>数据类型的转换</li>
+</ul>
+<h4 id="05-post请求和get请求的区别"><a href="#05-post请求和get请求的区别" class="headerlink" title="05-post请求和get请求的区别"></a><strong>05-post请求和get请求的区别</strong></h4><p>本质没有区别</p>
+<p>1.get请求一般是去取获取数据（其实也可以提交，但常见的是获取数据）；<br>post请求一般是去提交数据。</p>
+<p>2.get因为参数会放在url中，所以隐私性，安全性较差，请求的数据长度是有限制的，<br>不同的浏览器和服务器不同，一般限制在 2~8K 之间，更加常见的是 1k 以内；<br>post请求是没有的长度限制，请求数据是放在body中；</p>
+<p>3.get请求刷新服务器或者回退没有影响，post请求回退时会重新提交数据请求。</p>
+<p>4.get请求可以被缓存，post请求不会被缓存。</p>
+<p>5.get请求会被保存在浏览器历史记录当中，post不会。get请求可以被收藏为书签，因为参数就是url中，但post不能。它的参数不在url中。</p>
+<p>6.get请求只能进行url编码（appliacation-x-www-form-urlencoded）,post请求支持多种（multipart&#x2F;form-data等）。</p>
+<p>深入理解<br>1…GET 和 POST都是http请求方式， 底层都是 TCP&#x2F;IP协议；通常GET 产生一个 TCP 数据包；POST 产生两个 TCP 数据包（但firefox是发送一个数据包），</p>
+<p>2.对于 GET 方式的请求，浏览器会把 http header 和 data 一并发送出去，服务器响应 200<br>（返回数据）表示成功；</p>
+<p>而对于 POST，浏览器先发送 header，服务器响应 100， 浏览器再继续发送 data，服<br>务器响应 200 （返回数据）。</p>
+<h4 id="06-缓存穿透怎么解决"><a href="#06-缓存穿透怎么解决" class="headerlink" title="06-缓存穿透怎么解决"></a><strong>06-缓存穿透怎么解决</strong></h4><p>穿透原理：</p>
+<ul>
+<li>访问一个不存在的Key</li>
+<li>缓存中没有数据</li>
+<li>数据请求太多</li>
+</ul>
+<p>解决：</p>
+<ul>
+<li>规范key的命名，并且统一缓存查询和写入的入口。这样，在入口处，对key的规范进行检测。–这样保存恶意的key被拦截</li>
+<li>web服务器启动时，提前将有可能被频繁并发访问的数据写入缓存。—这样就规避大量的请求在第3步出现排队阻塞</li>
+<li>Synchronized双重检测机制，这时我们就需要使用同步（Synchronized）机制，在同步代码块前查询一下缓存是否存在对应的key，然后同步代码块里面再次查询缓存里是否有要查询的key。 这样“双重检测”的目的，还是避免并发场景下导致的没有意义的数据库的访问</li>
+<li>限流加锁</li>
+</ul>
+<h4 id="07-redis持久化有几种方式区别"><a href="#07-redis持久化有几种方式区别" class="headerlink" title="07-redis持久化有几种方式区别"></a><strong>07-redis持久化有几种方式区别</strong></h4><p>AOF：记录服务器每次写的操作，当服务器重启时会执行命令来恢复原来的数据(文件存储方式)</p>
+<p>优点：</p>
+<ul>
+<li><strong>使用AOF 会让Redis数据更加耐久</strong></li>
+<li><strong>数据同步快，不容易丢失</strong></li>
+<li><strong>AOF文件是一个只进行追加的日志文件</strong></li>
+<li><strong>redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进行重写</strong></li>
+<li><strong>AOF 文件有序地保存了对数据库执行的所有写入操作</strong></li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><strong>AOF体积大</strong></li>
+<li><strong>AOF速度低</strong></li>
+</ul>
+<p>RDB：在指定的时间间隔对数据进行快照存储(快照存储方式)</p>
+<p>优点：</p>
+<ul>
+<li><strong>适用数据集备份</strong></li>
+<li><strong>方便传输</strong></li>
+<li><strong>最大化redis性能</strong></li>
+<li><strong>恢复大数据集更快</strong></li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><strong>容易丢失数据</strong></li>
+<li><strong>耗时效率低</strong></li>
+</ul>
+<h4 id="08-sql执行计划怎么看"><a href="#08-sql执行计划怎么看" class="headerlink" title="08-sql执行计划怎么看"></a>08-sql执行计划怎么看</h4><p><strong>执行计划（execution plan，也叫查询计划或者解释计划）是数据库执行 SQL 语句的具体步骤</strong></p>
+<p><code>EXPLAIN</code>关键字</p>
+<p>接下来，我们要做的就是理解执行计划中这些字段的含义。下表列出了 MySQL 执行计划中的各个字段的作用：<br>列名 作用<br>id 语句中 SELECT 的序号。如果是 UNION 操作的结果，显示为 NULL；此时 table 列显示为 &lt;unionM,N&gt;。<br>select_type SELECT 的类型，包括：</p>
+<ul>
+<li>SIMPLE，不涉及 UNION 或者子查询的简单查询；</li>
+<li>PRIMARY，最外层 SELECT；</li>
+<li>UNION，UNION 中第二个或之后的 SELECT；</li>
+<li>DEPENDENT UNION，UNION 中第二个或之后的 SELECT，该 SELECT 依赖于外部查询；</li>
+<li>UNION RESULT，UNION 操作的结果；</li>
+<li>SUBQUERY，子查询中的第一个 SELECT；</li>
+<li>DEPENDENT SUBQUERY，子查询中的第一个 SELECT，该 SELECT 依赖于外部查询；</li>
+<li>DERIVED，派生表，即 FROM 中的子查询；</li>
+<li>DEPENDENT DERIVED，依赖于其他表的派生表；</li>
+<li>MATERIALIZED，物化子查询；</li>
+<li>UNCACHEABLE SUBQUERY，无法缓存结果的子查询，对于外部表中的每一行都需要重新查询；</li>
+<li>UNION 中第二个或之后的 SELECT，该 UNION属于 UNCACHEABLE SUBQUERY。<br>table 数据行的来源表，也有可能是以下值之一：</li>
+<li>&lt;unionM,N&gt;，id 为 M 和 N 的 SELECT 并集运算的结果；</li>
+<li>，id 为 N 的派生表的结果；</li>
+<li>，id 为 N 的物化子查询的结果。<br>partitions 对于分区表而言，表示数据行所在的分区；普通表显示为 NULL。<br>type 连接类型或者访问类型，性能从好到差依次为：</li>
+<li>system，表中只有一行数据，这是 const 类型的特殊情况；</li>
+<li>const，最多返回一条匹配的数据，在查询的最开始读取；</li>
+<li>eq_ref，对于前面的每一行，从该表中读取一行数据；</li>
+<li>ref，对于前面的每一行，从该表中读取匹配索引值的所有数据行；</li>
+<li>fulltext，通过 FULLTEXT 索引查找数据；</li>
+<li>ref_or_null，与 ref 类似，额外加上 NULL 值查找；</li>
+<li>index_merge，使用索引合并优化技术，此时 key 列显示使用的所有索引；</li>
+<li>unique_subquery，替代以下情况时的 eq_ref：value IN (SELECT primary_key FROM single_table WHERE some_expr)；</li>
+<li>index_subquery，与 unique_subquery 类似，用于子查询中的非唯一索引：value IN (SELECT key_column FROM single_table WHERE some_expr)；</li>
+<li>range，使用索引查找范围值；</li>
+<li>index，与 ALL 类型相同，只不过扫描的是索引；</li>
+<li>ALL，全表扫描，通常表示存在性能问题。<br>possible_keys 可能用到的索引，实际上不一定使用。<br>key 实际使用的索引。<br>key_len 实际使用的索引的长度。<br>ref 用于和 key 中的索引进行比较的字段或者常量，从而判断是否返回数据行。<br>rows 执行查询需要检查的行数，对于 InnoDB 是一个估计值。<br>filtered 根据查询条件过滤之后行数百分比，rows × filtered 表示进入下一步处理的行数。<br>Extra 包含了额外的信息。例如 Using temporary 表示使用了临时表，Using filesort 表示需要额外的排序操作等。</li>
+</ul>
+<h4 id="09-openfeign解决什么问题？远程方法调用有什么要求？"><a href="#09-openfeign解决什么问题？远程方法调用有什么要求？" class="headerlink" title="09-openfeign解决什么问题？远程方法调用有什么要求？"></a>09-openfeign解决什么问题？远程方法调用有什么要求？</h4><h4 id="10-gateway网关过滤器-配置"><a href="#10-gateway网关过滤器-配置" class="headerlink" title="10-gateway网关过滤器 配置"></a>10-gateway网关过滤器 配置</h4><h4 id="01-多线程有哪几种状态？"><a href="#01-多线程有哪几种状态？" class="headerlink" title="01- 多线程有哪几种状态？"></a>01- 多线程有哪几种状态？</h4><ol>
+<li>New:初始状态，线程被创建，没有调用start（）</li>
+<li>Runnable:运行状态，Java线程把操作系统中的就绪和运行两种状态统一称为“运行中”</li>
+<li>Blocked:阻塞，线程进入等待状态，线程因为某种原因，放弃了CPU的使用权<br>阻塞的几种情况：<br>A. 等待阻塞：运行的线程执行了wait()，JVM会把当前线程放入等待队列<br>B. 同步阻塞：运行的线程在获取对象的同步锁时，如果该同步锁被其他线程占用了，JVM会把当前线程放入锁池中<br>C. 其他阻塞：运行的线程执行sleep(),join()或者发出IO请求时，JVM会把当前线程设置为阻塞状态，当sleep()执行完，join()线程终止，IO处理完毕线程再次恢复</li>
+<li>Waiting:等待状态</li>
+<li>timed_waiting:超时等待状态，超时以后自动返回</li>
+<li>terminated:终止状态，当前线程执行完毕</li>
+</ol>
+<h4 id="02-线程池有哪些参数？"><a href="#02-线程池有哪些参数？" class="headerlink" title="02-线程池有哪些参数？"></a>02-线程池有哪些参数？</h4><p>线程池的构造函数有7个参数，分别是corePoolSize、maximumPoolSize、keepAliveTime、unit、workQueue、threadFactory、handler</p>
+<ul>
+<li>corePoolSize <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E7%BA%BF%E7%A8%8B%E6%B1%A0&spm=1001.2101.3001.7020">线程池</a>核心线程大小</li>
+<li>maximumPoolSize 线程池最大线程数量</li>
+<li>keepAliveTime 空闲线程存活时间</li>
+<li>unit 空闲线程存活时间单位</li>
+<li>workQueue 工作队列</li>
+</ul>
+<ol>
+<li>ArrayBlockingQueue</li>
+<li>LinkedBlockingQuene</li>
+<li>SynchronousQuene</li>
+<li>PriorityBlockingQueue</li>
+</ol>
+<ul>
+<li>threadFactory 线程工厂</li>
+<li>handler 拒绝策略</li>
+</ul>
+<h4 id="03-hashMap的put方法实现原理"><a href="#03-hashMap的put方法实现原理" class="headerlink" title="03-hashMap的put方法实现原理"></a>03-hashMap的put方法实现原理</h4><p>HashMap在put方法中，它使用hashCode()和equals()方法。当我们通过传递key-value对调用put方法的时候，HashMap使用Key hashCode()和哈希算法来找出存储key-value对的索引。如果索引处为空，则直接插入到对应的数组中，否则，判断是否是红黑树，若是，则红黑树插入，否则遍历链表，若长度不小于8，则将链表转为红黑树，转成功之后 再插入。</p>
+<h4 id="04-说说对反射的理解-项目当中用到了反射吗？"><a href="#04-说说对反射的理解-项目当中用到了反射吗？" class="headerlink" title="04-说说对反射的理解 项目当中用到了反射吗？"></a>04-说说对反射的理解 项目当中用到了反射吗？</h4><ul>
+<li>用 IoC 来注入和组装 bean</li>
+<li>动态代理、面向切面、bean 对象中的方法替换与增强，也使用了反射</li>
+<li>定义的注解，也是通过反射查找</li>
+</ul>
+<h4 id="05-什么是回表查询"><a href="#05-什么是回表查询" class="headerlink" title="05-什么是回表查询"></a>05-什么是回表查询</h4><p>特定情况下的一种查询的步骤：</p>
+<p>一般数据库建表时，会创建索引，以普通索引为例，创建的索引结构中包含的是聚簇索引的值（一般就是主键id），在根据此普通索引进行查询时，首先会查到普通索引的位置，比如下标是110，那么会从110处取出聚簇值，也就是id值，再拿id值取表中取数据，</p>
+<p>这个过程就叫做回表。</p>
+<p>再说下什么是聚簇索引，一个表建立后，如果有主键，主键就是默认的聚簇索引，它的特点就是，数据的物理存储顺序和索引顺序一致，一个表建立好了，存储的物理顺序也不会再改变了，所以也说，聚簇索引只有一个。没有主键，就会自动建立。</p>
+<h4 id="06-慢SQL日志怎么开-怎么看？"><a href="#06-慢SQL日志怎么开-怎么看？" class="headerlink" title="06-慢SQL日志怎么开 怎么看？"></a>06-慢SQL日志怎么开 怎么看？</h4><ul>
+<li>slow_query_log：慢查询开启状态</li>
+<li>slow_query_log_file：慢查询日志存放的位置（一般设置为 MySQL 的数据存放目录）</li>
+<li>long_query_time：查询超过多少秒才记录</li>
+</ul>
+<p>可以通过 log-slow-queries 选项开启慢查询日志。通过 long_query_time 选项来设置时间值，时间以秒为单位。如果查询时间超过了这个时间值，这个查询语句将被记录到慢查询日志。</p>
+<ul>
+<li>dir 参数指定慢查询日志的存储路径，如果不指定存储路径，慢查询日志将默认存储到 MySQL 数据库的数据文件夹下。</li>
+<li>filename 参数指定日志的文件名，生成日志文件的完整名称为 filename-slow.log。 如果不指定文件名，默认文件名为 hostname-slow.log，hostname 是 MySQL 服务器的主机名。</li>
+<li>“n”参数是设定的时间值，该值的单位是秒。如果不设置 long_query_time 选项，默认时间为 10 秒。</li>
+</ul>
+<h4 id="07-springboot的核心注解有哪些"><a href="#07-springboot的核心注解有哪些" class="headerlink" title="07-springboot的核心注解有哪些"></a>07-springboot的核心注解有哪些</h4><ul>
+<li><strong>@Configuration</strong></li>
+<li><strong>@Import</strong></li>
+<li><strong>@SpringBootApplication</strong></li>
+<li><strong>@ConditionalOnJava</strong></li>
+</ul>
+<h4 id="08-springboot的启动流程？"><a href="#08-springboot的启动流程？" class="headerlink" title="08-springboot的启动流程？"></a>08-springboot的启动流程？</h4><p>0.启动main方法开始</p>
+<p>1.<strong>初始化配置</strong>：通过类加载器，（loadFactories）读取classpath下所有的spring.factories配置文件，创建一些初始配置对象；通知监听者应用程序启动开始，创建环境对象environment，用于读取环境配置 如 application.yml</p>
+<p>2.<strong>创建应用程序上下文</strong>-createApplicationContext，创建 bean工厂对象</p>
+<p>3.<strong>刷新上下文（启动核心）</strong><br>3.1 配置工厂对象，包括上下文类加载器，对象发布处理器，beanFactoryPostProcessor<br>3.2 注册并实例化bean工厂发布处理器，并且调用这些处理器，对包扫描解析(主要是class文件)<br>3.3 注册并实例化bean发布处理器 beanPostProcessor<br>3.4 初始化一些与上下文有特别关系的bean对象（创建tomcat服务器）<br>3.5 实例化所有bean工厂缓存的bean对象（剩下的）<br>3.6 发布通知-通知上下文刷新完成（启动tomcat服务器）</p>
+<p>4.<strong>通知监听者-启动程序完成</strong></p>
+<h4 id="09-你对redis中的主从复制，哨兵模式你了解吗？"><a href="#09-你对redis中的主从复制，哨兵模式你了解吗？" class="headerlink" title="09-你对redis中的主从复制，哨兵模式你了解吗？"></a>09-你对redis中的主从复制，哨兵模式你了解吗？</h4><p>Redis主从复制 主要是分为全量同步和部分同步<br>全量同步一般发生在slave初始化阶段，这个时候slave需要将master上的数据都复制一遍，后边部分同步都是在master发生变化后，slave进行的部分同步</p>
+<p>当一个从数据库启动的时候，会向主数据库发送sync命令<br>当主数据库收到sync命令后会在后台保存快照(执行rdb操作)，并在缓存区记录后面所有的写操作<br>当主数据库快照保存完整后，redis会将主数据库快照文件发送给从数据库<br>从数据库收到快照后，会丢弃原有的数据库，载入收到的快照<br>主数据库发送完快照后，会开始向从数据库中发送从数据库的写命令<br>从数据库完成对快照的载入，会接受请求，开始执行向从数据库中执行相对应的写操作</p>
+<h4 id="10-微服务服务降级、熔断的实现"><a href="#10-微服务服务降级、熔断的实现" class="headerlink" title="10-微服务服务降级、熔断的实现"></a>10-微服务服务降级、熔断的实现</h4><h4 id="01spring的中设计到的设计模式"><a href="#01spring的中设计到的设计模式" class="headerlink" title="01spring的中设计到的设计模式"></a>01spring的中设计到的设计模式</h4><h4 id="02springmvc有哪些主键做什么用的？"><a href="#02springmvc有哪些主键做什么用的？" class="headerlink" title="02springmvc有哪些主键做什么用的？"></a>02springmvc有哪些主键做什么用的？</h4><h4 id="03spring如何配置事务"><a href="#03spring如何配置事务" class="headerlink" title="03spring如何配置事务"></a>03spring如何配置事务</h4><h4 id="04-aop的有哪些通知，什么特点"><a href="#04-aop的有哪些通知，什么特点" class="headerlink" title="04 aop的有哪些通知，什么特点"></a>04 aop的有哪些通知，什么特点</h4><h4 id="05-stream流你项目中如何使用"><a href="#05-stream流你项目中如何使用" class="headerlink" title="05 stream流你项目中如何使用"></a>05 stream流你项目中如何使用</h4><h3 id="2、要求"><a href="#2、要求" class="headerlink" title="2、要求"></a>2、要求</h3><p>1、上午整理面试题，自己可以查询百度等方式完成，要求,1 逻辑清晰，2语言简洁 3、3-4点即可</p>
+<p>2、下午3点在老师桌子上拿取白纸写面试题答案，自己对自己上午的内容进行验收</p>
+<p>3、下周会检查，验收大家周末的面试体整理情况</p>
+<p>4、都能完成的可以继续复习整理以前的内容或者整理微服务springcloud组件</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>面试题</div>
+      <div>https://lfrok.top/2022/11/27/Java/面试题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>B612🚀</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月27日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/" title="面试题二">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">面试题二</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/27/%E9%A9%AC%E5%85%8B%E6%80%9D/%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B1%E4%BA%A7%E4%B8%BB%E4%B9%89/" title="什么是共产主义">
+                        <span class="hidden-mobile">什么是共产主义</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="lv-container" data-id="city" data-uid="MTAyMC8zODU3Mi8xNTEwMA==">
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#lv-container', function() {
+        Fluid.utils.createScript('https://cdn-city.livere.com/js/embed.dist.js');
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Fork</span></a> <strong><i style= color:red>☭ </i></strong> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>B-612</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

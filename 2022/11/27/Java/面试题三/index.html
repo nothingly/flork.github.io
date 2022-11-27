@@ -1,0 +1,730 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="B612🚀">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="泛型方法如何使用定义使用  泛型方法 是在调用方法的时候指明泛型的具体类型. 语句： 修饰符 &lt;T,E,…&gt; 返回值类型 方法名（形参列表）{。。。。。。}  修饰符与返回值类型中间的 泛型标识符 &lt;T,E,…&gt;,是 泛型方法的标志，只有这种格式声明的方法才是泛型方法。 泛型方法声明时的 泛型标识符 &lt;T,E,…&gt; 表示在方法可以使用声明的泛型类型。 与泛型类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题三">
+<meta property="og:url" content="https://lfrok.top/2022/11/27/Java/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89/index.html">
+<meta property="og:site_name" content="Le Petit Prince">
+<meta property="og:description" content="泛型方法如何使用定义使用  泛型方法 是在调用方法的时候指明泛型的具体类型. 语句： 修饰符 &lt;T,E,…&gt; 返回值类型 方法名（形参列表）{。。。。。。}  修饰符与返回值类型中间的 泛型标识符 &lt;T,E,…&gt;,是 泛型方法的标志，只有这种格式声明的方法才是泛型方法。 泛型方法声明时的 泛型标识符 &lt;T,E,…&gt; 表示在方法可以使用声明的泛型类型。 与泛型类">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-27T09:54:43.544Z">
+<meta property="article:modified_time" content="2022-11-27T10:33:46.966Z">
+<meta property="article:author" content="B612🚀">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>面试题三 - Le Petit Prince</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lfrok.top","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>B-612</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/same/">
+                <i class="iconfont icon-twitch-fill"></i>
+                我们
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://pprince.top/bgc/bgc-2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="面试题三"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-27 17:54" pubdate>
+          2022年11月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">面试题三</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <ul>
+<li><h4 id="泛型方法如何使用定义使用"><a href="#泛型方法如何使用定义使用" class="headerlink" title="泛型方法如何使用定义使用"></a>泛型方法如何使用定义使用</h4></li>
+</ul>
+<p><strong><code>泛型方法</code> 是在<code>调用方法</code>的时候指明泛型的具体类型.</strong></p>
+<p><strong>语句：</strong></p>
+<p>修饰符 &lt;T,E,…&gt; 返回值类型 方法名（形参列表）{<br>。。。。。。<br>}</p>
+<ul>
+<li>修饰符与返回值类型中间的 泛型标识符 &lt;T,E,…&gt;,是 泛型方法的标志，只有这种格式声明的方法才是泛型方法。</li>
+<li>泛型方法声明时的 泛型标识符 &lt;T,E,…&gt; 表示在方法可以使用声明的泛型类型。</li>
+<li>与泛型类相同，泛型标识符可以是任意类型,常见的如T,E,K,V 等。</li>
+<li>泛型方法可以声明为 static 的，并且与普通的静态方法是一样的。</li>
+</ul>
+<h4 id="普通泛型方法"><a href="#普通泛型方法" class="headerlink" title="普通泛型方法"></a>普通泛型方法</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GenericMethod</span> &#123;<br><br>    <span class="hljs-comment">//1.普通的泛型方法</span><br>    <span class="hljs-keyword">public</span> &lt;T&gt; <span class="hljs-title class_">String</span> <span class="hljs-title function_">commonMethod</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name,T t</span>)&#123;<br>        <span class="hljs-title class_">String</span> res = <span class="hljs-string">&quot;&quot;</span>;<br>        res += name +<span class="hljs-string">&quot;-&quot;</span>+ t;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;普通泛型方法 ： &quot;</span>+res);<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br><br><br><span class="hljs-variable constant_">JAVA</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h4><figure class="highlight wren"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs wren"><span class="hljs-variable">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GenericMethodApplication</span> &#123;<br>    <span class="hljs-variable">public</span> <span class="hljs-keyword">static</span> <span class="hljs-variable">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params">String</span>[] <span class="hljs-params">args</span>) &#123;<br>        <span class="hljs-comment">//1.调用普通泛型方法</span><br>        <span class="hljs-title class_">GenericMethod</span> <span class="hljs-variable">genericMethod</span> <span class="hljs-operator">=</span> <span class="hljs-variable">new</span> <span class="hljs-title class_">GenericMethod</span>();<br>        <span class="hljs-title class_">String</span> <span class="hljs-variable">commonRes01</span> <span class="hljs-operator">=</span> <span class="hljs-variable">genericMethod</span>.<span class="hljs-property">commonMethod</span>(<span class="hljs-string">&quot;001&quot;</span>, <span class="hljs-string">&quot;bb&quot;</span>);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(<span class="hljs-variable">commonRes01</span>);<br>        <span class="hljs-title class_">String</span> <span class="hljs-variable">commonRes02</span> <span class="hljs-operator">=</span> <span class="hljs-variable">genericMethod</span>.<span class="hljs-property">commonMethod</span>(<span class="hljs-string">&quot;002&quot;</span>, <span class="hljs-number">100</span>);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(<span class="hljs-variable">commonRes02</span>);<br>        <span class="hljs-title class_">String</span> <span class="hljs-variable">commonRes03</span> <span class="hljs-operator">=</span> <span class="hljs-variable">genericMethod</span>.<span class="hljs-property">commonMethod</span>(<span class="hljs-string">&quot;003&quot;</span>, <span class="hljs-literal">true</span>);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(<span class="hljs-variable">commonRes03</span>);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(<span class="hljs-string">&quot;==================&quot;</span>);<br>    &#125;<br>&#125;<br><br><br><span class="hljs-variable">JAVA</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="静态泛型方法"><a href="#静态泛型方法" class="headerlink" title="静态泛型方法"></a>静态泛型方法</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GenericMethod</span> &#123;<br><br>    <span class="hljs-comment">//2.静态的泛型方法</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;T,E&gt; <span class="hljs-title class_">String</span> <span class="hljs-title function_">staticMethod</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name,T t,E e</span>)&#123;<br>        <span class="hljs-title class_">String</span> res = <span class="hljs-string">&quot;&quot;</span>;<br>        res += name +<span class="hljs-string">&quot;-&quot;</span>+ t +<span class="hljs-string">&quot;-&quot;</span>+ e;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;静态泛型方法 ： &quot;</span>+res);<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br><br><span class="hljs-variable constant_">JAVA</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="调用-1"><a href="#调用-1" class="headerlink" title="调用"></a>调用</h4><figure class="highlight wren"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs wren"><span class="hljs-variable">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GenericMethodApplication</span> &#123;<br>    <span class="hljs-variable">public</span> <span class="hljs-keyword">static</span> <span class="hljs-variable">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params">String</span>[] <span class="hljs-params">args</span>) &#123;<br>     <br>        <span class="hljs-comment">//2.调用静态泛型方法</span><br>        <span class="hljs-title class_">String</span> staticRes01 <span class="hljs-operator">=</span> <span class="hljs-title class_">GenericMethod</span>.<span class="hljs-property">staticMethod</span>(<span class="hljs-string">&quot;001&quot;</span>, <span class="hljs-string">&quot;aa&quot;</span>, <span class="hljs-string">&quot;bb&quot;</span>);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(staticRes01);<br>        <span class="hljs-title class_">String</span> staticRes02 <span class="hljs-operator">=</span> <span class="hljs-title class_">GenericMethod</span>.<span class="hljs-property">staticMethod</span>(<span class="hljs-string">&quot;002&quot;</span>, <span class="hljs-number">100</span>, &#x27;<span class="hljs-variable">c</span>&#x27;);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(staticRes02);<br>        <span class="hljs-title class_">String</span> staticRes03 <span class="hljs-operator">=</span> <span class="hljs-title class_">GenericMethod</span>.<span class="hljs-property">staticMethod</span>(<span class="hljs-string">&quot;003&quot;</span>, <span class="hljs-number">12.05</span>d, <span class="hljs-literal">false</span>);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(staticRes03);<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-property">println</span>(<span class="hljs-string">&quot;==================&quot;</span>);<br>   <br>    &#125;<br>&#125;<br><br><span class="hljs-variable">JAVA</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="泛型方法中的可变参数"><a href="#泛型方法中的可变参数" class="headerlink" title="泛型方法中的可变参数"></a>泛型方法中的可变参数</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GenericMethod</span> &#123;<br><br>    <span class="hljs-comment">//3.带可变参数的泛型方法</span><br>    <span class="hljs-keyword">public</span> &lt;A&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">argsMethod</span>(<span class="hljs-params">A ... args</span>)</span>&#123;<br>        <span class="hljs-keyword">for</span> (A arg : args) &#123;<br>            System.<span class="hljs-keyword">out</span>.println(arg);<br>        &#125;<br>    &#125;<br>&#125;<br><br>调用<br>package com.northcastle.genericmethod;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * author : northcastle</span><br><span class="hljs-comment"> * createTime:2021/10/23</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GenericMethodApplication</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span>(<span class="hljs-params">String[] args</span>)</span> &#123;<br>     <br>        <span class="hljs-comment">//3.调用可变参数的方法</span><br>        genericMethod.argsMethod(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">300</span>,<span class="hljs-number">400</span>,<span class="hljs-number">500</span>,<span class="hljs-number">600</span>);<br>        System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;==================&quot;</span>);<br>    &#125;<br>&#125;<br><br><br>JAVA<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="你怎么使用注解？"><a href="#你怎么使用注解？" class="headerlink" title="你怎么使用注解？"></a>你怎么使用注解？</h4></li>
+</ul>
+<p>注解是一种能被添加到java代码中的元数据，类、方法、变量、参数和包都可以用注解来修饰。注解对于它所修饰的代码并没有直接的影响</p>
+<ol>
+<li>框架中的注解</li>
+</ol>
+<p><strong>@RestController</strong></p>
+<p>@RestController 是@controller和@ResponseBody 的结合</p>
+<p>@Controller 将当前修饰的类注入SpringBoot IOC容器，使得从该类所在的项目跑起来的过程中，这个类就被实例化。<br>@ResponseBody 它的作用简短截说就是指该类中所有的API接口返回的数据，甭管你对应的方法返回Map或是其他Object，它会以Json字符串的形式返回给客户端</p>
+<p><strong>@Requestmapper</strong></p>
+<ol>
+<li>自定义注解、解析</li>
+</ol>
+<ul>
+<li>@interface</li>
+</ul>
+<p>定义注解类型元素时需要注意如下几点：</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">访问修饰符必须为<span class="hljs-keyword">public</span>，不写默认为<span class="hljs-keyword">public</span>；<br>该元素的类型只能是基本数据类型、<span class="hljs-type">String</span>、<span class="hljs-keyword">Class</span>、枚举类型、注解类型（体现了注解的嵌套效果）以及上述类型的一位数组；<br>该元素的名称一般定义为名词，如果注解中只有一个元素，请把名字起为value（后面使用会带来便利操作）；<br>()不是定义方法参数的地方，也不能在括号中定义任何参数，仅仅只是一个特殊的语法；<br><span class="hljs-keyword">default</span>代表默认值，值必须和第<span class="hljs-number">2</span>点定义的类型一致；<br>如果没有默认值，代表后续使用注解时必须给该类型元素赋值。<br><br><span class="hljs-keyword">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>元注解</li>
+</ul>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p>@Target注解，是专门用来限定某个自定义注解能够被应用在哪些Java元素上面的</p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p>@Retention注解，翻译为持久力、保持力。即用来修饰自定义注解的生命力。<br>注解的生命周期有三个阶段：1、Java源文件阶段；2、编译到class文件阶段；3、运行期阶段。</p>
+<h4 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h4><p>用来指定自定义注解是否能随着被定义的java文件生成到JavaDoc文档当中</p>
+<h4 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h4><p>指定某个自定义注解如果写在了父类的声明部分，那么子类的声明部分也能自动拥有该注解。@Inherited注解只对那些@Target被定义为ElementType.TYPE的自定义注解起作用。</p>
+<ol>
+<li>项目中的自定义注解的使用</li>
+</ol>
+<ul>
+<li><h4 id="项目中的异常处理"><a href="#项目中的异常处理" class="headerlink" title="项目中的异常处理"></a>项目中的异常处理</h4></li>
+</ul>
+<p>前端</p>
+<p>后端</p>
+<p>数据库</p>
+<ul>
+<li><p><em><strong>可预知的异常</strong></em><br>指的是在程序中根据业务需求或者是程序运行之前保证运行无误，提前对异常进行判断处理。一般返回的异常信息包括：执行结果标志（成功&#x2F;失败）、错误码、错误提示信息。处理方案，看代码</p>
+<p><strong>不可预知的异常</strong><br>指的是由<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A1%86%E6%9E%B6&spm=1001.2101.3001.7020">框架</a>抛出来的异常</p>
+</li>
+<li><h4 id="反射的使用"><a href="#反射的使用" class="headerlink" title="反射的使用"></a>反射的使用</h4></li>
+</ul>
+<p><strong>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制</strong></p>
+<ol>
+<li>任何数据类型（包括基本数据类型）都有一个“静态”的class属性</li>
+<li>Object(对象) ——&gt; getClass();</li>
+<li>通过Class类的静态方法：forName（String className）(常用)</li>
+</ol>
+<ul>
+<li><h4 id="ArrayList的底层"><a href="#ArrayList的底层" class="headerlink" title="ArrayList的底层"></a>ArrayList的底层</h4></li>
+<li><p>ArrayList是使用最广泛的List实现类，其内部数据结构基于数组实现，提供了对List的增加（add）、删除（remove）和访问（get）功能。ArrayList的缺点是对元素必须连续存储，当需要在ArrayList的中间位置插入或者删除元素时，需要将待插入或者删除的节点后的所有元素进行移动，其修改代价较高，因此，ArrayList不适合随机插入和删除的操作，更适合随机查找和遍历的操作。ArrayList不需要在定义时指定数组的长度，在数组长度不能满足存储要求时，ArrayList会创建一个新的更大的数组并将数组中已有的数据复制到新的数组中。</p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>面试题三</div>
+      <div>https://lfrok.top/2022/11/27/Java/面试题三/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>B612🚀</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月27日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/%E9%9D%A2%E8%AF%95%E9%A2%98%E5%9B%9B/" title="面试题四">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">面试题四</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/" title="面试题二">
+                        <span class="hidden-mobile">面试题二</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="lv-container" data-id="city" data-uid="MTAyMC8zODU3Mi8xNTEwMA==">
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#lv-container', function() {
+        Fluid.utils.createScript('https://cdn-city.livere.com/js/embed.dist.js');
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Fork</span></a> <strong><i style= color:red>☭ </i></strong> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>B-612</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

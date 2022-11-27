@@ -1,0 +1,873 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="B612🚀">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="https:&#x2F;&#x2F;mybatis.org&#x2F;mybatis-3&#x2F;zh&#x2F;index.html11、简介1-1.什么是Mybatis   Mybatis是一款优秀的持久层框架，它支持定制化SQL、存储过程以及高级映射。  Mybatis避免了几乎所有的JDBC代码和手动设置参数以及获取结果集。  MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain O">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis">
+<meta property="og:url" content="https://lfrok.top/2022/11/27/Java/Mybatis/index.html">
+<meta property="og:site_name" content="Le Petit Prince">
+<meta property="og:description" content="https:&#x2F;&#x2F;mybatis.org&#x2F;mybatis-3&#x2F;zh&#x2F;index.html11、简介1-1.什么是Mybatis   Mybatis是一款优秀的持久层框架，它支持定制化SQL、存储过程以及高级映射。  Mybatis避免了几乎所有的JDBC代码和手动设置参数以及获取结果集。  MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain O">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-27T09:58:46.501Z">
+<meta property="article:modified_time" content="2022-11-27T10:33:46.974Z">
+<meta property="article:author" content="B612🚀">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Mybatis - Le Petit Prince</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lfrok.top","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>B-612</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/same/">
+                <i class="iconfont icon-twitch-fill"></i>
+                我们
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://pprince.top/bgc/bgc-2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Mybatis"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-27 17:58" pubdate>
+          2022年11月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          18k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          152 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Mybatis</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><a target="_blank" rel="noopener" href="https://mybatis.org/mybatis-3/zh/index.html">https://mybatis.org/mybatis-3/zh/index.html</a><br>1<br>1、简介<br>1-1.什么是Mybatis</p>
+<p>  Mybatis是一款优秀的持久层框架，它支持定制化SQL、存储过程以及高级映射。<br>  Mybatis避免了几乎所有的JDBC代码和手动设置参数以及获取结果集。<br>  MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。<br>  MyBatis 本是apache的一个开源项目iBatis, 2010年这个项目由apache software foundation 迁移到了google code，并且改名为MyBatis 。2013年11月迁移到Github。</p>
+<p>github地址</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3">https://github.com/mybatis/mybatis-3</a><br>1<br>依赖</p>
+<p>org.mybatis mybatis 3.5.7 </p>
+<p>1 2 3 4 5 6 1-2.持久化 数据持久化</p>
+<p>持久化就是将程序的数据在持久状态和瞬时状态转化的过程<br>内存：断电即失<br>数据库（jdbc）、io文件持久化<br>生活：冷藏，罐头。<br>为什么需要持久化？<br>有一些对象，不能让他丢掉。<br>内存太贵了<br>1-3.持久层（名词，概念）<br>Dao层，Service层，Controller层…<br>完成持久化工作的代码块<br>层界限十分明显。<br>1-4.为啥需要Mybatis？<br>帮助程序员将数据存入到数据库中。<br>方便<br>传统的JDBC代码太复杂了。简化。框架。自动化。<br>不用Mybatis也可以。更容易上手。技术没有高低之分<br>特点</p>
+<p>简单易学：只要两个jar文件+配置几个sql映射文件易于学习<br>灵活： sql写在xml里，便于统一管理和优化。<br>解除sql与程序代码的耦合：将业务逻辑和数据访问逻辑分离，使系统的设计更清晰，。sql和代码的分离，提高了可维护性。<br>提供映射标签，支持对象与数据库的orm字段关系映射<br>提供对象关系映射标签，支持对象关系组建维护<br>提供xml标签，支持编写动态sql。<br>最重要的一点：使用的人多！</p>
+<p>2、第一个Mybatis程序<br>思路：搭建环境——》导入Mybatis——》编写代码——》测试</p>
+<p>2-1.搭建环境</p>
+<p>mysql mysql-connector-java 5.1.49 </p>
+<p>org.mybatis mybatis 3.5.3 </p>
+<p>junit junit 4.13 test </p>
+<p>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 2-2.创建模块 1.编写mybatis核心配置文件 </p>
+<p>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 2.编写mybatis工具类</p>
+<p>package cn.bloghut.dao.utils;</p>
+<p>import org.apache.ibatis.io.Resources;<br>import org.apache.ibatis.session.SqlSession;<br>import org.apache.ibatis.session.SqlSessionFactory;<br>import org.apache.ibatis.session.SqlSessionFactoryBuilder;</p>
+<p>import java.io.IOException;<br>import java.io.InputStream;</p>
+<p>&#x2F;**</p>
+<ul>
+<li><p>获取SQLSessionFactory对—-》sqlSession</p>
+<p>&#x2F;<br>public class MybatisUtils {<br>private static SqlSessionFactory factory;<br>static {<br>try {<br>&#x2F;&#x2F;使用mybatis第一步<br>String resource &#x3D; “mybatis-config”;<br>InputStream in &#x3D; Resources.getResourceAsStream(resource);<br>factory &#x3D; new SqlSessionFactoryBuilder().build(in);</p>
+<p>} catch (IOException e) {<br>e.printStackTrace();<br>}<br>}<br>&#x2F;</p>
+<ul>
+<li></li>
+</ul>
+<ul>
+<li>既然有了SqlSessionFactory，顾名思义，我们就可以从中获得SQLSession实例了</li>
+<li>SQLSession 完全包含了面向库执行 SQL 命令所需的所有方法</li>
+<li>@return<br>*&#x2F;<br>public static SqlSession getSqlSession(){<br>return factory.openSession();<br>}</li>
+</ul>
+</li>
+</ul>
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>3.编写代码</p>
+<p>实体类<br>Dao接口<br>接口实现类<br>public class User implements Serializable {<br>private int id;<br>private String name;<br>private String pwd;<br>&#x2F;&#x2F;省略toString ，get&#x2F;set<br>}</p>
+<p>public interface UserDao {<br>List getUser();<br>}</p>
+<p>​      select * from users   </p>
+<p>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 4.测试</p>
+<p>@Test<br>public void test(){<br>&#x2F;&#x2F;第一步，获得SQLSession对象<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>&#x2F;&#x2F;执行SQL<br>&#x2F;&#x2F;方式一<br>&#x2F;&#x2F;UserDao userDao &#x3D; sqlSession.getMapper(UserDao.class);<br>&#x2F;&#x2F;List users &#x3D; userDao.getUser();</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">//方式二<br>List&lt;<span class="hljs-keyword">User</span>&gt; users = sqlSession.selectList(&quot;cn.bloghut.dao.UserDao.getUser&quot;);<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">User</span> <span class="hljs-keyword">user</span> : users)&#123;<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(<span class="hljs-keyword">user</span>);<br>&#125;<br>//关闭SQLSession<br>sqlSession.<span class="hljs-keyword">close</span>();<br><br><span class="hljs-type">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>3、CRUD<br>3-1.namespace<br>namespace中的包名要和Dao&#x2F;Mapper 接口的包名一致！</p>
+<p>3-2.select<br>选择、查询语句<br>id ：就是对应的namespace接口中的方法名；<br>resuleType ：SQL语句执行的返回值<br>parameterType ：参数类型</p>
+<p>1.编写接口</p>
+<p>&#x2F;**</p>
+<ul>
+<li>根据id查询用户</li>
+<li>@param id</li>
+<li>@return<br>*&#x2F;<br>User getUserById(int id);<br>1<br>2<br>3<br>4<br>5<br>6<br>2.编写对应的mapper中的sql语句</li>
+</ul>
+<p> 1 2 3 3.测试</p>
+<p>@Test<br>public void t1() {<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>UserMapper userMapper &#x3D; sqlSession.getMapper(UserMapper.class);<br>User user &#x3D; userMapper.getUserById(1);<br>System.out.println(user);</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sqlSession.<span class="hljs-keyword">close</span>();<br><br><span class="hljs-type">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>3-3.insert</p>
+<p>insert into users(name,pwd) values(#{name},#{pwd})</p>
+<p>1<br>2<br>3<br>3-4.update</p>
+<p>update users set name&#x3D;#{name},pwd&#x3D;#{pwd} where id &#x3D; #{id} </p>
+<p>1 2 3 4 3-5.delete </p>
+<p>delete from users where id &#x3D; #{id} </p>
+<p>1 2 3 注意：增删改需要提交事务</p>
+<p>3-6万能Map<br>  假设，我们的实体类，或者数据库中的表，字段或者参数过多，我们应当考虑使用Map！</p>
+<p>@Test<br>public void t5() {<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>UserMapper userMapper &#x3D; sqlSession.getMapper(UserMapper.class);<br>Map&lt;String, Object&gt; map &#x3D; new HashMap&lt;&gt;();<br>map.put(“username”, “闲言”);<br>map.put(“password”, “111”);<br>userMapper.addUser2(map);<br>sqlSession.commit();<br>sqlSession.close();<br>}</p>
+<p>void addUser2(Map&lt;String,Object&gt; map);</p>
+<p>insert into users(name,pwd) values(#{username},#{password}) </p>
+<p>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 Map 传递参数，直接在sql中取出key 【parameterType&#x3D;“Map”】 对象传递参数，直接在sql中取对象的属性即可 【parameterType&#x3D;“Object”】 只有一个基本类型参数的情况下，可以直接在sql中取到 多个参数用Map或注解 3-7模糊查询 1.Java代码执行的时候，传递通配符 %%</p>
+<p>List userLike &#x3D; userMapper.getUserLike(“%闲%”);<br>1<br>2.在sql拼接中使用通配符</p>
+<p>select * from users where name like “%”#{value}”%”<br>1<br>4、配置解析<br>4-1、核心配置文件<br>mybatis-config.xml<br>configuration（配置）<br>properties（属性）<br>settings（设置）<br>typeAliases（类型别名）<br>typeHandlers（类型处理器）<br>objectFactory（对象工厂）<br>plugins（插件）<br>environments（环境配置）<br>environment（环境变量）<br>transactionManager（事务管理器）<br>dataSource（数据源）<br>databaseIdProvider（数据库厂商标识）<br>mappers（映射器）<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>4-2.environments（环境配置）<br>MyBatis 可以配置成适应多种环境<br>不过要记住：尽管可以配置多个环境，但每个 SqlSessionFactory 实例只能选择一种环境。<br>学会使用配置多套运行环境！<br>Mybatis默认的事务管理器就是JDBC，连接池：POOLED<br>4-3.属性properties<br>  这些属性可以在外部进行配置，并可以进行动态替换。你既可以在典型的 Java 属性文件中配置这些属性，也可以在 properties 元素的子元素中设置。【db.properties】</p>
+<p>编写一个配置文件</p>
+<p>db.properties<br>driver&#x3D;com.mysql.jdbc.Driver<br>url&#x3D;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;mybatis?useSSL&#x3D;false&amp;useUnicode&#x3D;true&amp;characterEncoding&#x3D;UTF8<br>username&#x3D;root<br>password&#x3D;123<br>1<br>2<br>3<br>4<br>5<br>4-4.类型别名typeAliases<br>  存在别名的是为Java类型设置一个短的名字<br>  存在的意义仅用来减少类完全限定的冗余</p>
+<p>1 2 3   也可以指定一个包名，Mybatis会在包名下面搜索java Bean ，比如：   扫描实体类的包，它的默认别名就是为这个类的类型，首字母小写！ </p>
+<p>1 2 3   在实体类比较少的时候，使用第一种方式   如果实体类十分多，建议使用第二种   第一种可以DIY别名，第二种则不行，如果非要改，需要在实体上增加注解</p>
+<p>@Alias(“user”)<br>public class User implements Serializable {<br>1<br>2<br>4-5.映射器<br>MapperRegistry：注册绑定我们的Mapper文件；<br>方式一：【推荐使用】</p>
+<p>1 2 3 4 5 方式二：使用class文件绑定注册 </p>
+<p>1 2 3 4 注意点：   接口和他的mapper文件都需要在Mybatis核心配置文件中注册   接口和他的mapper文件配置文件必须再同一包下！</p>
+<p>方式三：使用扫描包注册</p>
+<p>1 2 3 4 5 注意点：   接口和他的Mapper配置文件必须同名！   接口和他的mapper文件配置文件必须再同一包下！</p>
+<p>4-6生命周期和作用域<br>  不同作用域和生命周期类别是至关重要的，因为错误的使用会导致非常严重的并发问题。</p>
+<p>SqlSessionFactoryBuilder</p>
+<p>一旦创建了 SqlSessionFactory，就不再需要它了。<br>局部变量<br>SqlSessionFactory</p>
+<p>SqlSessionFactory 一旦被创建就应该在应用的运行期间一直存在，没有任何理由丢弃它或重新创建另一个实例。<br>SqlSessionFactory 的最佳作用域是应用作用域。<br>最简单的就是使用单例模式或者静态单例模式<br>SqlSession（相当于从连接池中获取一个连接）</p>
+<p>连接到连接池的请求！<br>关闭<br>SqlSession 的实例不是线程安全的，因此是不能被共享的，它的最佳的作用域是请求或方法作用域<br>用完之后需要赶紧关闭，<br>一个SQLSession 可以多次使用它的getMapper方法，获取多个mapper接口实例<br>打个比方：</p>
+<p>SqlSessionFactoryBuilder 是造车公司<br>造了100台车，然后买给租车公司（SQLSessionFactory），然后倒闭<br>SQLSession 用户 租车，使用车<br>mapper 用户的使用，用户租到车之后可以开去这，开去那，任凭使用<br>用户（SQLSession） 执行完想做的事之后，必须归还“汽车” 给租车公司（SQLSessionFactory）</p>
+<p>  这里面的每一个mapper 就代表一个具体的业务。</p>
+<p>5、解决属性名和字段名不一致的问题<br>数据库中的字段和JavaBean不一致的情况</p>
+<p>public class User {<br>private int id;<br>private String name;<br>private String password;<br>1<br>2<br>3<br>4</p>
+<p> 1 2 3 解决办法 起别名 </p>
+<p> 1 2 3 2、ResultMap 结果集映射 resultMap 元素是 MyBatis 中最重要最强大的元素。   ResultMap 的设计思想是，对简单的语句做到零配置，对于复杂一点的语句，只需要描述语句之间的关系就行了。   MyBatis 会在幕后自动创建一个 ResultMap，再根据属性名来映射列到 JavaBean 的属性上。 </p>
+<p>1 2 3 4 5 6</p>
+<p>6、日志<br>6-1.日志工厂<br>如果一个数据库操作出现了异常，我们需要排错。日志就是最好的助手！<br>曾经：debug sout<br>现在：日志工厂</p>
+<p>SLF4J<br>LOG4J 【掌握】<br>LOG4J2<br>JDK_LOGGING<br>COMMONS_LOGGING<br>STDOUT_LOGGING<br>NO_LOGGING</p>
+<p>1 2 3 4</p>
+<p>6-2.LOG4J<br>什么是LOG4J</p>
+<p>Log4j是Apache的一个开源项目<br>通过使用Log4j，我们可以控制日志信息输送的目的地是控制台、文件、GUI组件<br>我们可以控制每一条日志的输出格式；<br>通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。<br>通过一个配置文件来灵活地进行配置，而不需要修改应用的代码。<br>1.先导入LOG4J的依赖</p>
+<p>log4j log4j 1.2.17 </p>
+<p>1 2 3 4 5 2.编写log4j.properties文件</p>
+<h3 id="配置根"><a href="#配置根" class="headerlink" title="配置根"></a>配置根</h3><p>log4j.rootLogger &#x3D; debug,console ,fileAppender,dailyRollingFile,ROLLING_FILE,MAIL,DATABASE</p>
+<h3 id="设置输出sql的级别，其中logger后面的内容全部为jar包中所包含的包名"><a href="#设置输出sql的级别，其中logger后面的内容全部为jar包中所包含的包名" class="headerlink" title="设置输出sql的级别，其中logger后面的内容全部为jar包中所包含的包名"></a>设置输出sql的级别，其中logger后面的内容全部为jar包中所包含的包名</h3><p>log4j.logger.org.apache&#x3D;debug<br>log4j.logger.java.sql.Connection&#x3D;debug<br>log4j.logger.java.sql.Statement&#x3D;debug<br>log4j.logger.java.sql.PreparedStatement&#x3D;debug<br>log4j.logger.java.sql.ResultSet&#x3D;debug</p>
+<h3 id="配置输出到控制台"><a href="#配置输出到控制台" class="headerlink" title="配置输出到控制台"></a>配置输出到控制台</h3><p>log4j.appender.console &#x3D; org.apache.log4j.ConsoleAppender<br>log4j.appender.console.Target &#x3D; System.out<br>log4j.appender.console.layout &#x3D; org.apache.log4j.PatternLayout<br>log4j.appender.console.layout.ConversionPattern &#x3D; %d{ABSOLUTE} %5p %c{1}:%L - %m%n</p>
+<h3 id="配置输出到文件"><a href="#配置输出到文件" class="headerlink" title="配置输出到文件"></a>配置输出到文件</h3><p>log4j.appender.fileAppender &#x3D; org.apache.log4j.FileAppender<br>log4j.appender.fileAppender.File &#x3D; logs&#x2F;log.log<br>log4j.appender.fileAppender.Append &#x3D; true<br>log4j.appender.fileAppender.Threshold &#x3D; DEBUG<br>log4j.appender.fileAppender.layout &#x3D; org.apache.log4j.PatternLayout<br>log4j.appender.fileAppender.layout.ConversionPattern &#x3D; %-d{yyyy-MM-dd HH:mm:ss} [ %t:%r ] - [ %p ] %m%n</p>
+<h3 id="配置输出到文件，并且每天都创建一个文件"><a href="#配置输出到文件，并且每天都创建一个文件" class="headerlink" title="配置输出到文件，并且每天都创建一个文件"></a>配置输出到文件，并且每天都创建一个文件</h3><p>log4j.appender.dailyRollingFile &#x3D; org.apache.log4j.DailyRollingFileAppender<br>log4j.appender.dailyRollingFile.File &#x3D; logs&#x2F;log.log<br>log4j.appender.dailyRollingFile.Append &#x3D; true<br>log4j.appender.dailyRollingFile.Threshold &#x3D; DEBUG<br>log4j.appender.dailyRollingFile.layout &#x3D; org.apache.log4j.PatternLayout<br>log4j.appender.dailyRollingFile.layout.ConversionPattern &#x3D; %-d{yyyy-MM-dd HH:mm:ss} [ %t:%r ] - [ %p ] %m%n</p>
+<h3 id="配置输出到文件，且大小到达指定尺寸的时候产生一个新的文件"><a href="#配置输出到文件，且大小到达指定尺寸的时候产生一个新的文件" class="headerlink" title="配置输出到文件，且大小到达指定尺寸的时候产生一个新的文件"></a>配置输出到文件，且大小到达指定尺寸的时候产生一个新的文件</h3><p>log4j.appender.ROLLING_FILE&#x3D;org.apache.log4j.RollingFileAppender<br>log4j.appender.ROLLING_FILE.Threshold&#x3D;ERROR<br>log4j.appender.ROLLING_FILE.File&#x3D;rolling.log<br>log4j.appender.ROLLING_FILE.Append&#x3D;true<br>log4j.appender.ROLLING_FILE.MaxFileSize&#x3D;10KB<br>log4j.appender.ROLLING_FILE.MaxBackupIndex&#x3D;1<br>log4j.appender.ROLLING_FILE.layout&#x3D;org.apache.log4j.PatternLayout<br>log4j.appender.ROLLING_FILE.layout.ConversionPattern&#x3D;[framework] %d - %c -%-4r [%t] %-5p %c %x - %m%n</p>
+<p>4j.appender.A1.layout&#x3D;org.apache.log4j.xml.XMLLayout<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>3.配置log4j为日志实现</p>
+<p>1 2 3 4 4.测试</p>
+<p>6-3简单使用<br>  1.在要使用log4j的类中导入Apache的包</p>
+<p>import org.apache.log4j.Logger;<br>1<br>  2.日志对象，参数为当前类的class</p>
+<p>static Logger logger &#x3D; Logger.getLogger(UserTest.class);<br>1<br>  3.使用</p>
+<p>日志级别<br>info<br>debug<br>error<br>@Test<br>public void testLog4j(){<br>logger.info(“info:进入了testLog4j方法”);<br>logger.debug(“debug:进入了testLog4j方法”);<br>logger.error(“error:进入了testLog4j方法”);<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</p>
+<p>7、分页<br>思考：为什么要分页？<br>  减少数据的处理量</p>
+<p>7-1.使用Limit分页<br>  语法：select * from users limit startIndex,PageSize;</p>
+<p>1.接口</p>
+<p>&#x2F;**</p>
+<ul>
+<li>分页查询用户</li>
+<li>@param map</li>
+<li>@return<br>*&#x2F;<br>List getUserByLimit(Map&lt;String,Object&gt; map);<br>1<br>2<br>3<br>4<br>5<br>6<br>2.映射文件</li>
+</ul>
+<p> 1 2 3 3.测试</p>
+<p>@Test<br>public void t4(){<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>UserMapper userMapper &#x3D; sqlSession.getMapper(UserMapper.class);<br>Map&lt;String,Object&gt; map &#x3D; new HashMap&lt;&gt;();<br>map.put(“currentPage”,0);<br>map.put(“pageSize”,2);<br>List users &#x3D; userMapper.getUserByLimit(map);<br>for (User user : users) {<br>System.out.println(user);<br>}<br>sqlSession.close();<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>7-2.RowBounds分页<br>  不再使用SQL实现分页<br>1.接口</p>
+<p>&#x2F;**</p>
+<ul>
+<li>使用RowBounds实现分页</li>
+<li>@return<br>*&#x2F;<br>List getUserByRowBounds();<br>1<br>2<br>3<br>4<br>5<br>2.mapper.xml</li>
+</ul>
+<p> 1 2 3 3.测试</p>
+<p>@Test<br>public void t5(){<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>RowBounds rowBounds &#x3D; new RowBounds(0, 2);<br>&#x2F;&#x2F;通过Java代码层实现分页<br>List users &#x3D; sqlSession.selectList(“cn.bloghut.dao.UserMapper.getUserByRowBounds”, null, rowBounds);<br>for (User user : users) {<br>System.out.println(user);<br>}<br>sqlSession.close();<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>7-3.分页插件<br>官网</p>
+<p><a target="_blank" rel="noopener" href="https://pagehelper.github.io/">https://pagehelper.github.io/</a><br>1</p>
+<p>8、注解开发<br>8-1.面向接口编程<br>  大家之前都学过面向对象编程，也学习过接口，但在真正的开发中，很多时候我们会选择面向接口编程。</p>
+<p>  根本原因:解耦，可拓展，提高复用，分层开发中，上层不用管具体的实现，大家都遵守共同的标准，使得开发变得容易，规范性更好</p>
+<p>  在一个面向对象的系统中，系统的各种功能是由许许多多的不同对象协作完成的。在这种情况下，各个对象内部是如何实现自己的,对系统设计人员来讲就不那么重要了;</p>
+<p>  而各个对象之间的协作关系则成为系统设计的关键。小到不同类之间的通信，大到各模块之间的交互，在系统设计之初都是要着重考虑的，这也是系统设计的主要工作内容。面向接口编程就是指按照这种思想来编程。</p>
+<p>关于接口的理解<br>  接口从更深层次的理解，应是定义(规范，约束)与实现(名实分离的原则）的分离。<br>  接口的本身反映了系统设计人员对系统的抽象理解。</p>
+<p>接口应有两类:<br>    第一类是对一个个体的抽象，它可对应为一个抽象体(abstract class);<br>    第二类是对一个个体某一方面的抽象，即形成一个抽象面(interface) ;<br>一个体有可能有多个抽象面。抽象体与抽象面是有区别的。</p>
+<p>三个面向区别<br>  面向对象是指，我们考虑问题时，以对象为单位，考虑它的属性及方法．<br>  面向过程是指，我们考虑问题时，以一个具体的流程（事务过程)为单位，考虑它的实现.<br>  接口设计与非接口设计是针对复用技术而言的，与面向对象（过程)不是一个问题.更多的体现就是对系统整体的架构</p>
+<p>8-2.使用注解开发<br>1.注解在接口上实现</p>
+<p>@Select(“select * from users”)<br>List getUsers();<br>1<br>2<br>2.需要在核心配置文件中绑定接口！</p>
+<p>1 2 3 4 3.测试</p>
+<p>  本质：反射机制实现<br>  底层：动态代理！</p>
+<p>8-3.Mybatis详细的执行流程！</p>
+<p>8-4.CRUD<br>在配置文件绑定Mapper接口位置</p>
+<p>1 2 3 我们可以在工具类创建的时候实现自动提交事务！</p>
+<p>&#x2F;**</p>
+<ul>
+<li>既然有了SqlSessionFactory，顾名思义，我们就可以从中获得SQLSession实例了</li>
+<li>SQLSession 完全包含了面向库执行 SQL 命令所需的所有方法</li>
+<li>@return<br>*&#x2F;<br>public static SqlSession getSqlSession(){<br>return factory.openSession(true);<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>接口</li>
+</ul>
+<p>public interface UserMapper {</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Select</span>(<span class="hljs-string">&quot;select * from users&quot;</span>)<br>List&lt;User&gt; <span class="hljs-built_in">getUsers</span>();<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 方法存在多个参数，所有的参数前面必须加上 @Param 注解</span><br><span class="hljs-comment"> * @param id</span><br><span class="hljs-comment"> * @return</span><br><span class="hljs-comment"> */</span><br><span class="hljs-variable">@Select</span>(<span class="hljs-string">&quot;select * from users where id = #&#123;id&#125;&quot;</span>)<br>User <span class="hljs-built_in">getUserById</span>(<span class="hljs-variable">@Param</span>(<span class="hljs-string">&quot;id&quot;</span>) int id);<br><br><span class="hljs-variable">@Insert</span>(<span class="hljs-string">&quot;insert into users(name,pwd) values(#&#123;name&#125;,#&#123;password&#125;)&quot;</span>)<br>int <span class="hljs-built_in">insert</span>(User user);<br><br><span class="hljs-variable">@Update</span>(<span class="hljs-string">&quot;update  users  set name=#&#123;name&#125;,pwd=#&#123;password&#125; where id = #&#123;id&#125;&quot;</span>)<br>int <span class="hljs-built_in">update</span>(User user);<br><br><span class="hljs-variable">@Delete</span>(<span class="hljs-string">&quot;delete from users where id = #&#123;id&#125;&quot;</span>)<br>int <span class="hljs-built_in">delete</span>(<span class="hljs-variable">@Param</span>(<span class="hljs-string">&quot;id&quot;</span>)int id);<br><br><span class="hljs-selector-tag">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>测试</p>
+<p>public class T {</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">@Test<br><span class="hljs-built_in">public</span> <span class="hljs-type">void</span> t1() &#123;<br>    SqlSession sqlSession = MybatisUtils.getSqlSession();<br>    //底层主要应用反射<br>    UserMapper mapper = sqlSession.getMapper(UserMapper.<span class="hljs-keyword">class</span>);<br>    List&lt;<span class="hljs-keyword">User</span>&gt; users = mapper.getUsers();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">User</span> <span class="hljs-keyword">user</span> : users) &#123;<br>        <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(<span class="hljs-keyword">user</span>);<br>    &#125;<br>    sqlSession.<span class="hljs-keyword">close</span>();<br><br>&#125;<br><br>@Test<br><span class="hljs-built_in">public</span> <span class="hljs-type">void</span> t2() &#123;<br>    SqlSession sqlSession = MybatisUtils.getSqlSession();<br>    //底层主要应用反射<br>    UserMapper mapper = sqlSession.getMapper(UserMapper.<span class="hljs-keyword">class</span>);<br>    <span class="hljs-keyword">User</span> <span class="hljs-keyword">user</span> = mapper.getUserById(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(<span class="hljs-keyword">user</span>);<br>    sqlSession.<span class="hljs-keyword">close</span>();<br><br>&#125;<br><br>@Test<br><span class="hljs-built_in">public</span> <span class="hljs-type">void</span> t3() &#123;<br>    SqlSession sqlSession = MybatisUtils.getSqlSession();<br>    //底层主要应用反射<br>    UserMapper mapper = sqlSession.getMapper(UserMapper.<span class="hljs-keyword">class</span>);<br>    <span class="hljs-keyword">User</span> <span class="hljs-keyword">user</span> = <span class="hljs-built_in">new</span> <span class="hljs-keyword">User</span>();<br>    <span class="hljs-keyword">user</span>.setName(&quot;xian&quot;);<br>    <span class="hljs-keyword">user</span>.setPassword(&quot;321&quot;);<br>    <span class="hljs-type">int</span> flag = mapper.<span class="hljs-keyword">insert</span>(<span class="hljs-keyword">user</span>);<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(flag);<br>    sqlSession.<span class="hljs-keyword">close</span>();<br><br>&#125;<br>@Test<br><span class="hljs-built_in">public</span> <span class="hljs-type">void</span> t4() &#123;<br>    SqlSession sqlSession = MybatisUtils.getSqlSession();<br>    //底层主要应用反射<br>    UserMapper mapper = sqlSession.getMapper(UserMapper.<span class="hljs-keyword">class</span>);<br>    <span class="hljs-keyword">User</span> <span class="hljs-keyword">user</span> = <span class="hljs-built_in">new</span> <span class="hljs-keyword">User</span>();<br>    <span class="hljs-keyword">user</span>.setId(<span class="hljs-number">12</span>);<br>    <span class="hljs-keyword">user</span>.setName(&quot;xy&quot;);<br>    <span class="hljs-keyword">user</span>.setPassword(&quot;321&quot;);<br>    <span class="hljs-type">int</span> flag = mapper.<span class="hljs-keyword">update</span>(<span class="hljs-keyword">user</span>);<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(flag);<br>    sqlSession.<span class="hljs-keyword">close</span>();<br>&#125;<br>@Test<br><span class="hljs-built_in">public</span> <span class="hljs-type">void</span> t5() &#123;<br>    SqlSession sqlSession = MybatisUtils.getSqlSession();<br>    //底层主要应用反射<br>    UserMapper mapper = sqlSession.getMapper(UserMapper.<span class="hljs-keyword">class</span>);<br>    <span class="hljs-type">int</span> flag = mapper.<span class="hljs-keyword">delete</span>(<span class="hljs-number">12</span>);<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(flag);<br>    sqlSession.<span class="hljs-keyword">close</span>();<br>&#125;<br><br><span class="hljs-type">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>关于@Param注解</p>
+<p>基本类型的参数或者String类型，需要加上<br>引用类型不需要加<br>如果只有一个基本类型的话，可以忽略，但是建议都加上<br>我们在SQL中引用的就是我们这里的@Param(“uid”)中设定的属性名<br>#{} 和 ${} 区别</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41231928/article/details/105120292">https://blog.csdn.net/weixin_41231928/article/details/105120292</a><br>1<br>9、Lombox<br>1.安装插件方便使用的第三方工具</p>
+<p>2.导入依赖</p>
+<p>org.projectlombok lombok 1.16.16 </p>
+<p>1 2 3 4 5 6 3.在实体类上使用</p>
+<p>@Data<br>@AllArgsConstructor<br>@NoArgsConstructor<br>public class User {<br>private int id;<br>private String name;<br>private String password;<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>@Getter and @Setter<br>@FieldNameConstants<br>@ToString<br>@EqualsAndHashCode<br>@AllArgsConstructor 全参构造方法<br>@RequiredArgsConstructor and<br>@NoArgsConstructor 无参构造方法<br>@Log, @Log4j, @Log4j2, @Slf4j, @XSlf4j, @CommonsLog, @JBossLog, @Flogger, @CustomLog<br>@Data<br>@Builder<br>@SuperBuilder<br>@Singular<br>@Delegate<br>@Value<br>@Accessors<br>@Wither<br>@With<br>@SneakyThrows<br>@val<br>@var<br>experimental @var<br>@UtilityClass<br>Lombok config system<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>加@Data注解之前</p>
+<p>加@Data注解之后</p>
+<p>常见注解说明</p>
+<p>@Data：无参构造、get、set、toString、equals、toString<br>@AllArgsConstructor：有参构造<br>@NoArgsConstructor：无参构造<br>@toString：toString()方法<br>1<br>2<br>3<br>4<br>10、多对一处理</p>
+<p>  多个学生，对应一个老师<br>  对于学生这边而言，关联…多个学生，关联一个老师【多对一】<br>  对于老师而言，集合，一个老师，有很多学生【一对多】</p>
+<p>10-1.按照查询嵌套处理</p>
+<p> 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 10-2.按照结果嵌套处理 </p>
+<p>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 mybatis多对一查询方式 子查询 连表查询</p>
+<p>11、一对多处理<br>比如：一个老师拥有多个学生！<br>对于老师而言，就是一对多关系</p>
+<p>实体类</p>
+<p>@AllArgsConstructor<br>@NoArgsConstructor<br>@Data<br>public class Teacher {<br>private int id;<br>private String name;<br>private List students;<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>区别</p>
+<p>@Data<br>@AllArgsConstructor<br>@NoArgsConstructor<br>public class Student {<br>private int id;<br>private String name;<br>private int tid;<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>11-1.按照查询嵌套处理</p>
+<p> 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 11-2按照结果嵌套处理 </p>
+<p> 1 2 3 4 5 6 7 8 9 10 11 12 13 14 小结   关联-association   集合-collection   JavaType &amp; ofType     JavaType 用来指定实体类中的类型的     ofType 用来指定映射到List 集合中的pojo类型 ，泛型中的约束类型</p>
+<p>面试高频</p>
+<p>Mysql引擎<br>InnoDB底层原理<br>索引<br>索引优化！<br>12、动态SQL<br>  什么是动态SQL：动态SQL就是根据不同的条件生成不同的SQL语句</p>
+<p>if<br>choose (when, otherwise)<br>trim (where, set)<br>foreach<br>1<br>2<br>3<br>4<br>12-1.if标签<br>这里需要用到1 &#x3D; 1，因为1&#x3D;1 这个条件无论如何都满足的 后面的条件 and 拼接才能成功。</p>
+<p> 1 2 3 4 5 6 7 8 9 12-2.where标签   使用where标签可以排除掉 1&#x3D; 1，如果我们没有设置查询条件，mybatis自动把 where标签去掉。</p>
+<p> where 元素只会在子元素返回任何内容的情况下才插入 “WHERE” 子句。而且，若子句的开头为 “AND” 或 “OR”，where 元素也会将它们去除。</p>
+<p> 1 2 3 4 5 6 7 8 9 10 11 12-3.Choose标签   类似Java中的switch，只满足一个，如果都不满足，则执行outherwise </p>
+<p> 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 12-4.set标签   set 元素会动态地在行首插入 SET 关键字，并会删掉额外的逗号。 </p>
+<p>update blog title&#x3D;#{title}, author &#x3D; #{author} where id &#x3D; #{id} </p>
+<p>1 2 3 4 5 6 7 8 9 10 11 12   所谓动态SQL，本质还是SQL语句，只是我们在SQL层面，去执行一个逻辑代码</p>
+<p>12-5.foreach<br>  foreach 元素的功能非常强大，它允许你指定一个集合，声明可以在元素体内使用的集合项（item）和索引（index）变量。它也允许你指定开头与结尾的字符串以及集合项迭代之间的分隔符。这个元素也不会错误地添加多余的分隔符，看它多智能！</p>
+<p>  提示 你可以将任何可迭代对象（如 List、Set 等）、Map 对象或者数组对象作为集合参数传递给 foreach。当使用可迭代对象或者数组时，index 是当前迭代的序号，item 的值是本次迭代获取到的元素。当使用 Map 对象（或者 Map.Entry 对象的集合）时，index 是键，item 是值。</p>
+<p>官方例子</p>
+<p> 1 2 3 4 5 6 7 8 9 in： 类似一个区间 item： 当前元素 index： 当前迭代号，类似数组下标 open：开头 separator：分割 close：结尾 例： </p>
+<p> 1 2 3 4 5 6 7 或者 </p>
+<p> 1 2 3 4 5 6 7 8 动态SQL就是在拼接SQL语句，我们只要保证SQL的正确性，按照SQL的格式，去排列组合就可以了</p>
+<p>13、缓存<br>13-1.简介<br>查询 ： 连接数据库 ：好资源！<br>一次查询的结果，给他暂存到一个可以直接取到的地方！—》内存 ： 缓存</p>
+<p>我们再次查询相同数据的时候，直接走缓存，就不用走数据库了</p>
+<p>1.什么是缓存(Cache)？</p>
+<p>存在内存中的临时数据<br>将用户经常查询的数据放在缓存（内存)，用户去查询数据就不用从磁盘上的（关系型数据库数据文件）查询，从缓存中查询，从而提高程序效率，解决了高并发的性能问题。<br>2.为什么使用缓存？</p>
+<p>减少和数据库的交互次数，减少系统开销，提高系统效率<br>3.什么样的数据能使用缓存？</p>
+<p>经常查询且不改变的数据。<br>缓存的重要性是不言而喻的。 使用缓存， 我们可以避免频繁的与数据库进行交互， 尤其是在查询越多、缓存命中率越高的情况下， 使用缓存对性能的提高更明显。</p>
+<p>13-2.Mybatis 缓存<br>  MyBatis 包含一个非常强大的查询缓存特性,它可以非 常方便地配置和定制。缓存可以极大的提升查询效率。</p>
+<p>MyBatis系统中默认定义了两级缓存。 一级缓存和二级缓存。<br>默认情况下，只有一级缓存（SqlSession级别的缓存， 也称为本地缓存）开启。<br>二级缓存需要手动开启和配置，他是基于namespace级 别的缓存。<br>为了提高扩展性。MyBatis定义了缓存接口Cache。我们可以通过实现Cache接口来自定义二级缓存，将缓存数据保存到三方缓存里。<br>13-3.一级缓存（本地缓存）<br>与数据库同一次会话期间查询到的数据会放在本地缓存中<br>以后如果需要获取相同的数据，直接从缓存中取，没必要再去查询数据库。<br>一级缓存是sqlSession级别的缓存，默认一直是开启的。<br>测试步骤：</p>
+<p>开启日志<br>测试在一个Session中查询两台相同记录<br>查看日志输出</p>
+<p>缓存失效情况</p>
+<p>查询不同的东西<br>增删改操作，可能会改变原来的数据，所以必定会刷新缓存<br>@Test<br>public void t2(){<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>UserMapper mapper &#x3D; sqlSession.getMapper(UserMapper.class);<br>User user &#x3D; mapper.getUserById(1);<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs abnf">User user1 <span class="hljs-operator">=</span> new User()<span class="hljs-comment">;</span><br>user1.setId(<span class="hljs-number">2</span>)<span class="hljs-comment">;</span><br>user1.setName(<span class="hljs-string">&quot;咸鱼&quot;</span>)<span class="hljs-comment">;</span><br>user1.setPwd(<span class="hljs-string">&quot;123456&quot;</span>)<span class="hljs-comment">;</span><br>mapper.update(user1)<span class="hljs-comment">;</span><br><br>User user2 <span class="hljs-operator">=</span> mapper.getUserById(<span class="hljs-number">1</span>)<span class="hljs-comment">;</span><br>System.out.println(user <span class="hljs-operator">=</span><span class="hljs-operator">=</span> user2)<span class="hljs-comment">;</span><br>sqlSession.close()<span class="hljs-comment">;</span><br><br>TEXT<br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17</p>
+<p>查询不同的Mapper.xml<br>手动清除</p>
+<p>@Test<br>public void t2(){<br>SqlSession sqlSession &#x3D; MybatisUtils.getSqlSession();<br>UserMapper mapper &#x3D; sqlSession.getMapper(UserMapper.class);<br>User user &#x3D; mapper.getUserById(1);<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>sqlSession.clearCache();&#x2F;&#x2F;手动清理缓存<br>User user2 &#x3D; mapper.getUserById(1);<br>System.out.println(user &#x3D;&#x3D; user2);<br>sqlSession.close();<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</p>
+<p>小结：一级缓存默认是开启的，只在一次SQLSession中有效，也就是拿到连接 到关闭连接这个区间有效。</p>
+<p>13-4.二级缓存（全局缓存）<br>  基于namespace级别的缓存，一个namespace对应一个二级缓存。</p>
+<p>工作机制：</p>
+<p>一个会话，查询一条数据，这个数据就会被放在当前的一级缓存中。<br>如果会话关闭，一级缓存中的数据会被保存到二级缓存中，新的会话查询信息，就可以参照二级缓存。<br>sqlSession即通过EmployeeMapper查询Employee，也通过DepartmentMapper查询Department，不同namespace查出的数据会放在自己对应的缓存中（map）。<br>使用步骤：<br>开启全局缓存</p>
+<p>1 2 在要使用二级缓存的Mapper.xml中开启 </p>
+<p>1 2 测试 我们需要将实体类序列化！否则就会报错！</p>
+<p>小结：</p>
+<p>只要开启了二级缓存，在同一个Mapper下就有效<br>所有的数据都会先放在一级缓存中；<br>只有当会话提交，或者会话关闭的时候，才会提交到二级缓存中<br>13-5.缓存原理</p>
+<p>13-6.自定义缓存-ehcache<br>Ehcache是一种广泛使用的开源Java分布式缓存。</p>
+<p>1.导入依赖</p>
+<p>org.mybatis.caches mybatis-ehcache 1.1.0 </p>
+<p>1 2 3 4 5 6 2.在mapper文件中设置</p>
+<p>3.编写ehcache配置文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;cache<br>        <span class="hljs-attribute">name</span>=<span class="hljs-string">&quot;cloud_user&quot;</span><br>        <span class="hljs-attribute">eternal</span>=<span class="hljs-string">&quot;false&quot;</span><br>        <span class="hljs-attribute">maxElementsInMemory</span>=<span class="hljs-string">&quot;5000&quot;</span><br>        <span class="hljs-attribute">overflowToDisk</span>=<span class="hljs-string">&quot;false&quot;</span><br>        <span class="hljs-attribute">diskPersistent</span>=<span class="hljs-string">&quot;false&quot;</span><br>        <span class="hljs-attribute">timeToIdleSeconds</span>=<span class="hljs-string">&quot;1800&quot;</span><br>        <span class="hljs-attribute">timeToLiveSeconds</span>=<span class="hljs-string">&quot;1800&quot;</span><br>        <span class="hljs-attribute">memoryStoreEvictionPolicy</span>=<span class="hljs-string">&quot;LRU&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Mybatis</div>
+      <div>https://lfrok.top/2022/11/27/Java/Mybatis/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>B612🚀</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月27日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/JVM/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/Mysql/" title="MySQL">
+                        <span class="hidden-mobile">MySQL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="lv-container" data-id="city" data-uid="MTAyMC8zODU3Mi8xNTEwMA==">
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#lv-container', function() {
+        Fluid.utils.createScript('https://cdn-city.livere.com/js/embed.dist.js');
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Fork</span></a> <strong><i style= color:red>☭ </i></strong> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>B-612</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

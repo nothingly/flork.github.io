@@ -1,0 +1,865 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="B612🚀">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="title: JVMcategories: Javadate:tags:  Java  —## JVM 常问面试题 请你谈谈你对JVM的理解？ java—&gt;class—-&gt; Java8虚拟机和之前的变化更新？ 什么是OOM 内存溢出 什么栈溢出StackOverFlowError？ 怎么分析 JVM 的常用调优参数？ 内存快照如何抓取，怎么分析Dump文件？知道吗 谈谈JVM中，类加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Le Petit Prince">
+<meta property="og:url" content="https://lfrok.top/2022/11/27/Java/JVM/index.html">
+<meta property="og:site_name" content="Le Petit Prince">
+<meta property="og:description" content="title: JVMcategories: Javadate:tags:  Java  —## JVM 常问面试题 请你谈谈你对JVM的理解？ java—&gt;class—-&gt; Java8虚拟机和之前的变化更新？ 什么是OOM 内存溢出 什么栈溢出StackOverFlowError？ 怎么分析 JVM 的常用调优参数？ 内存快照如何抓取，怎么分析Dump文件？知道吗 谈谈JVM中，类加">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c75dd1dd09ed4ad5b9d9becc4f4ad2c0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ea76c368974a4b4583bc2723914e20da.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/fe8de271243042879e446de289f9cb4e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a4da19b89f1643c9a230a32f1e114180.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/755316a0d0de458bade1e2dfbf18f909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4c7e9452e4ec4c63b68ad65e143032a5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/053ceda75779450fb67d60b86b332f14.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/eba963f33d5049b4a5927a99616cb04d.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/65774473ee4c4f6a996597ec85eee56b.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c160f21f38834433a9869b9008d87637.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c5db06216a9a4a7c9a762d6100dcf568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b94a77e1852c4d81be52fe1811b3b057.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b66bc8bb26c04eca81b8a49c267b3e37.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6cdd5bbaecbc42609f79ca53039b09eb.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/07cf04b0fd7a45cb81efa04285e0e364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c16b7b86da93411da8468a842245f99d.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e14b75bcbc6e4528aaaaa525dbc2f652.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/d695a698f16946a49d7f45ede2697ce8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/8bdd43c7dd6c4883a2b5eebd68ad54d6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5e7124c38b23453b8febf85c7255fbe2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9c89d5910c004bdd94af0b88e84496df.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/0df761e16dba4eccbabb13f108f4d361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a6c6f4ed99e247789434d7c111ab3c2f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/325a6d699d69470e820d03f775017475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/d744ae7f8fbb43ce9cc12e6aab391b61.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/821af2ce63844fa39c0d2a8cc1435eb0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ef302d1f31614a4e8aec5cba0d2fb221.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4ade8f094c894e468a576a996743b98e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2bb94682abc545b29ef102fe43e4e78e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1ec0202460cc472e9bfc4a10a000db48.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/dcd9295ed79e4c2385d254f0aab413aa.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/67f7cff0b89e4ad39bfb85632e024ad3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/547c3933e3bc4f8b96606e86033b0c3f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2022-11-27T09:58:46.501Z">
+<meta property="article:modified_time" content="2022-11-27T10:33:46.973Z">
+<meta property="article:author" content="B612🚀">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/c75dd1dd09ed4ad5b9d9becc4f4ad2c0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center">
+  
+  
+  
+  <title>Le Petit Prince</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lfrok.top","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>B-612</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/same/">
+                <i class="iconfont icon-twitch-fill"></i>
+                我们
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://pprince.top/bgc/bgc-2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-27 17:58" pubdate>
+          2022年11月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr>
+<p>title: JVM<br>categories: Java<br>date:<br>tags:</p>
+<ul>
+<li>Java</li>
+</ul>
+<p>—## <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=JVM&spm=1001.2101.3001.7020">JVM</a> 常问面试题</p>
+<p>请你谈谈你对JVM的理解？ java—&gt;class—-&gt;</p>
+<p>Java8虚拟机和之前的变化更新？</p>
+<p>什么是OOM 内存溢出</p>
+<p>什么栈溢出StackOverFlowError？ 怎么分析</p>
+<p>JVM 的常用调优参数？</p>
+<p>内存快照如何抓取，怎么分析Dump文件？知道吗</p>
+<p>谈谈JVM中，<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E7%B1%BB%E5%8A%A0%E8%BD%BD&spm=1001.2101.3001.7020">类加载</a>器你的认识？</p>
+<hr>
+<h2 id="1-JVM的位置"><a href="#1-JVM的位置" class="headerlink" title="1.JVM的位置"></a>1.JVM的位置</h2><p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/c75dd1dd09ed4ad5b9d9becc4f4ad2c0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/c75dd1dd09ed4ad5b9d9becc4f4ad2c0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/ea76c368974a4b4583bc2723914e20da.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/ea76c368974a4b4583bc2723914e20da.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  JVM 调优百分之99都是在堆里面调优，方法区是特殊的堆。</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/fe8de271243042879e446de289f9cb4e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/fe8de271243042879e446de289f9cb4e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h2 id="2-JVM的体系结构"><a href="#2-JVM的体系结构" class="headerlink" title="2.JVM的体系结构"></a>2.JVM的<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84&spm=1001.2101.3001.7020">体系结构</a></h2><p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/a4da19b89f1643c9a230a32f1e114180.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/a4da19b89f1643c9a230a32f1e114180.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h2 id="3-类加载器"><a href="#3-类加载器" class="headerlink" title="3.类加载器"></a>3.类加载器</h2><p>  作用：加载Class 文件，~ new Student();<br>  类似模板，是抽象的<br>  对象是实现，是具体的</p>
+<ol>
+<li>虚拟机自带的加载器</li>
+<li>启动类（根）加载器</li>
+<li>扩展类加载器</li>
+<li>应用程序加载器</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/755316a0d0de458bade1e2dfbf18f909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/755316a0d0de458bade1e2dfbf18f909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>只有一个模板</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/4c7e9452e4ec4c63b68ad65e143032a5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/4c7e9452e4ec4c63b68ad65e143032a5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<h2 id="4-双亲委派机制"><a href="#4-双亲委派机制" class="headerlink" title="4.双亲委派机制"></a>4.双亲委派机制</h2><p>  第一步：类加载器收到类加载的请求<br>  第二步：将这个请求向上委托给父类加载器去完成 ，一直向上委托，直到启动类加载器（Boot）<br>  第三步：启动类加载器检查是否能够加载当前和这个类 ，能加载就结束，使用当前的加载器，否则，抛出异常，通知子加载器进行加载。<br>  第四步：重复 第三步 步骤。</p>
+<p>  null ： java调用不到 ~C 、C++<br>    Java &#x3D; C++ ： 去掉繁琐的东西，指针，内存管理。<br>    Java &#x3D; C+±-</p>
+<p>双亲委派机制推荐阅读这篇文章</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/codeyanbao/article/details/82875064">https://blog.csdn.net/codeyanbao/article/details/82875064</a></p>
+</blockquote>
+<hr>
+<h2 id="5-沙箱安全机制"><a href="#5-沙箱安全机制" class="headerlink" title="5.沙箱安全机制"></a>5.沙箱安全机制</h2><p>  没什么东西</p>
+<hr>
+<h2 id="6-Native"><a href="#6-Native" class="headerlink" title="6.Native"></a>6.<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Native&spm=1001.2101.3001.7020">Native</a></h2><p>  凡是带了native 关键字的，说明java 的作用范围达不到了，会去调用底层C 语言的库。<br>  凡是带了native 关键字的，会进入本地方法栈。</p>
+<p>  调用本地接口：JNI<br>  JNI作用：扩展Java的使用，融合不同的编程语言为Java 所用！最初C、C++<br>  它在内存区域中专门开辟了一块标记区域：Native Method Stack，登记native 方法<br>  在最终执行的时候去加载本地方法库的方法，通过JNI</p>
+<p>  本地方法接口（JNI）Java Native Interface<br>  本地方法库</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">private</span> <span class="hljs-keyword">native</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start0</span><span class="hljs-params">()</span></span>;<br><span class="hljs-number">1</span><br><br>JAVA<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/053ceda75779450fb67d60b86b332f14.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/053ceda75779450fb67d60b86b332f14.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>调用其他接口：Scoket 、WebService~http</p>
+<hr>
+<h2 id="7-PC寄存器"><a href="#7-PC寄存器" class="headerlink" title="7.PC寄存器"></a>7.PC<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%AF%84%E5%AD%98%E5%99%A8&spm=1001.2101.3001.7020">寄存器</a></h2><p>  程序计数器：Program Counter Register<br>    每个线程都有一个程序计数器，是线程私有的，就是一个指针，指向方法区中的方法字节码（用来存储指向一条指令的地址，也即将要执行的指令代码），在执行引擎读取下一条指令，是一个非常小的内存空间，几乎可以忽略不计。</p>
+<hr>
+<h2 id="8-方法区"><a href="#8-方法区" class="headerlink" title="8.方法区"></a>8.方法区</h2><p>  Method Area 方法区<br>  方法区是被线程共享，所有字段和方法字节码，以及一些特殊方法，如构造函数，接口代码也在此定义，简单说，所有定义的方法的信息都保存在该区域，此区域属于共享空间。</p>
+<p>  静态变量、常量、类信息（构造方法、接口定义）、运行时的常量池存在方法区中，但是，实例变量存在堆内存中，和方法区无关</p>
+<p><strong>方法区里面存以下内容</strong><br>  1.static<br>  2.final<br>  3.Class 类模板<br>  4.常量池</p>
+<p><strong>类加载过程（面试）</strong></p>
+<ol>
+<li>new 一个类的时候，先在方法区有一个类的模板</li>
+<li>类模板完了 ，方法区还有个常量池</li>
+<li>引用在栈内存</li>
+<li>真实的 对象在堆内存</li>
+<li>引用指向堆内存真实的地址</li>
+</ol>
+<hr>
+<h2 id="9-栈"><a href="#9-栈" class="headerlink" title="9.栈"></a>9.栈</h2><p><strong>数据结构</strong></p>
+<p>  程序 &#x3D; 数据结构 +算法 ： 持续学习~<br>  程序 &#x3D; 框架 + 业务逻辑 ： 吃饭</p>
+<p>  栈：先进后出、后进先出</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/eba963f33d5049b4a5927a99616cb04d.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/eba963f33d5049b4a5927a99616cb04d.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  队列：先进先出（FIFO：First Input First Output）<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/65774473ee4c4f6a996597ec85eee56b.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/65774473ee4c4f6a996597ec85eee56b.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  喝多了吐就是栈，吃多了拉就是队列</p>
+<p>为什么main 方法 先执行，最后结束！</p>
+<p>栈：栈内存，主管程序的运行，生命周期与线程同步；<br>线程结束，栈内存也就释放，对于栈来说，不存在<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6&spm=1001.2101.3001.7020">垃圾回收</a>问题</p>
+<p>一旦线程结束，栈就over了</p>
+<p>栈：8大基本类型+对象引用</p>
+<p>栈运行原理：栈帧</p>
+<p>程序正在执行的方法，一定在栈的顶部</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/c160f21f38834433a9869b9008d87637.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/c160f21f38834433a9869b9008d87637.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>栈 + 堆 + 方法区：的一些交互关系</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/c5db06216a9a4a7c9a762d6100dcf568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/c5db06216a9a4a7c9a762d6100dcf568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h2 id="10-三种JVM"><a href="#10-三种JVM" class="headerlink" title="10.三种JVM"></a>10.三种JVM</h2><ol>
+<li>Sun公司 HostSpot Java HotSpot™ 64-Bit Server VM (build 25.101-b13, mixed mode)</li>
+<li>BEA Jrockit</li>
+<li>IBM J9 VM</li>
+</ol>
+<hr>
+<h2 id="11-堆"><a href="#11-堆" class="headerlink" title="11.堆"></a>11.堆</h2><p>Heap，一个JVM 只有一个<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%A0%86%E5%86%85%E5%AD%98&spm=1001.2101.3001.7020">堆内存</a>，堆内存的大小是可以调节的。</p>
+<p>类加载器读取了类文件后，一般会把什么东西放到堆中？<br>类的实例、方法、常量、变量~，保存我们所有引用类型的真实对象</p>
+<p>堆内存中还要细分为三个区域：</p>
+<ol>
+<li>新生区 (伊甸园区) Young&#x2F;New</li>
+<li>养老区 old</li>
+<li>永久区 Perm</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/b94a77e1852c4d81be52fe1811b3b057.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/b94a77e1852c4d81be52fe1811b3b057.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  1.GC 垃圾回收主要是在伊甸园区和养老区~<br>  2.假设内存满了，OOM ，堆内存不够！<br>  3.在JDK 8以后，永久存储区改了个名字（元空间）</p>
+<hr>
+<h2 id="12-新生区、老年区"><a href="#12-新生区、老年区" class="headerlink" title="12.新生区、老年区"></a>12.新生区、老年区</h2><p>类：诞生 和 成长的地方、甚至死亡。<br>伊甸园区，所有的的对象都是在伊甸园区new 出来的！<br>幸存者区（0,1）</p>
+<p>假设我的伊甸园区只能存储10个对象，当伊甸园区满了，就会触发一次轻GC。</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/b66bc8bb26c04eca81b8a49c267b3e37.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/b66bc8bb26c04eca81b8a49c267b3e37.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>这次gc有以下情况：<br>  有的对象可以还被引用，就幸存下来了。<br>  有的对象没有被引用了，就死了、没了。</p>
+<p>  幸存的下来的对象就移动到伊甸园区。</p>
+<p>当伊甸园区和性幸存区都满了，就会触发一次重GC。<br>  重gc 清理一次后，能活下来的对象就进入养老区了。</p>
+<p>（就跟一场战争一样，不断的活下来）</p>
+<p>真理：经过研究，99%的对象都是临时对象！ new</p>
+<h2 id="13-永久区"><a href="#13-永久区" class="headerlink" title="13.永久区"></a>13.永久区</h2><p>  1.jdk 1.6之前：永久代，常量池是在方法区中<br>  2.jdk 1.7 ：永久代， 但是慢慢的退化了，去 永久代，常量池在堆中<br>  3.jdk 1.8 之后：无永久代，常量池在元空间</p>
+<p>  永久区常驻内存的，用来存放JDK自身携带的class对象，interface元数据，存储的是Java运行时的一些环境或类信息这个区域不存在垃圾回收！关闭虚拟机就会释放这个区域的内存</p>
+<p>  OOM出现条件：一个启动器，加载了大量的第三方jar包、Tomcat部署了太多应用，大量动态生成的反射类，直到内存满。</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/6cdd5bbaecbc42609f79ca53039b09eb.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/6cdd5bbaecbc42609f79ca53039b09eb.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>逻辑上存在，物理上不存在。</p>
+<p>在一个项目中，突然出现OOM 故障，那么该如何排除研究为什么出错~<br>  1.能够看到代码第几行出错：内存快照分析工具，Eclipse MAT，Jprofiler<br>  2.Dubug，一行行分析代码~</p>
+<p><strong>MAT，Jprofiler作用：</strong><br>  1.分析Dump内存文件，快速定位内存泄漏；<br>  2.获得堆中的数据<br>  3.获得大的对象~</p>
+<p>  idea 安装Jprofiler<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/07cf04b0fd7a45cb81efa04285e0e364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/07cf04b0fd7a45cb81efa04285e0e364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  安装之后配置<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/c16b7b86da93411da8468a842245f99d.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/c16b7b86da93411da8468a842245f99d.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/e14b75bcbc6e4528aaaaa525dbc2f652.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/e14b75bcbc6e4528aaaaa525dbc2f652.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  idea 配置vm 参数</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ruby">-Xms20m -Xmx20m -<span class="hljs-variable constant_">XX</span><span class="hljs-symbol">:+HeapDumpOnOutOfMemoryError</span><br><span class="hljs-number">1</span><br><br><span class="hljs-variable constant_">JAVA</span><br></code></pre></td></tr></table></figure>
+
+<p>  windows 客户端安装</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/d695a698f16946a49d7f45ede2697ce8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70"><img src="https://img-blog.csdnimg.cn/d695a698f16946a49d7f45ede2697ce8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>www.ej-technologies.com<span class="hljs-regexp">/download/</span>jprofiler/files<br><span class="hljs-number">1</span><br><br>JAVA<br></code></pre></td></tr></table></figure>
+
+<p>Dump 内存文件分析<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/8bdd43c7dd6c4883a2b5eebd68ad54d6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/8bdd43c7dd6c4883a2b5eebd68ad54d6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>分析：<br>  一眼就可以看成ArrayList 出现问题了<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/5e7124c38b23453b8febf85c7255fbe2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/5e7124c38b23453b8febf85c7255fbe2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>错误代码如下</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">byte</span>[] array = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">1</span>*<span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>];<span class="hljs-comment">//1mb</span><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(String[] args) &#123;<br>    List&lt;P1&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>    <span class="hljs-keyword">int</span> <span class="hljs-keyword">count</span> = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>)&#123;<br>            list.add(<span class="hljs-keyword">new</span> P1());<br>            <span class="hljs-keyword">count</span>++;<br>        &#125;<br>    &#125;<span class="hljs-keyword">catch</span> (Throwable e)&#123;<br>        e.printStackTrace();<br>        System.out.<span class="hljs-keyword">println</span>(<span class="hljs-string">&quot;count===&quot;</span>+<span class="hljs-keyword">count</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-number">1234567891011121314151617</span><br><br>JAVA<br></code></pre></td></tr></table></figure>
+
+<p>  通过查看线程发现，第24行代码发现问题<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/9c89d5910c004bdd94af0b88e84496df.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/9c89d5910c004bdd94af0b88e84496df.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  生成dump文件之后会产生 java_pid21756.hprof.analysis 文件夹，可以将其删除<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/0df761e16dba4eccbabb13f108f4d361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70"><img src="https://img-blog.csdnimg.cn/0df761e16dba4eccbabb13f108f4d361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h2 id="14-堆内存调优"><a href="#14-堆内存调优" class="headerlink" title="14.堆内存调优"></a>14.堆内存调优</h2><p>没有</p>
+<hr>
+<h2 id="15-GC-：垃圾回收机制"><a href="#15-GC-：垃圾回收机制" class="headerlink" title="15.GC ：垃圾回收机制"></a>15.GC ：垃圾回收机制</h2><p>  垃圾回收的区域只有在堆里面（方法区在堆里面）<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/a6c6f4ed99e247789434d7c111ab3c2f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/a6c6f4ed99e247789434d7c111ab3c2f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<h3 id="15-1垃圾回收-x3D-GC"><a href="#15-1垃圾回收-x3D-GC" class="headerlink" title="15.1垃圾回收 &#x3D; GC"></a>15.1<strong>垃圾回收 &#x3D; GC</strong></h3><p>JVM 在进行垃圾回收（GC）时，并不是堆这三个区域统一回收。大部分时候，回收都是新生代~<br>  1.新生代<br>  2.幸存区（form，to）<br>  3.老年区</p>
+<p>  GC 两种类：轻GC（普通GC），重GC （全局GC）</p>
+<p>  轻GC 指针对 新生代 和 偶尔走一下 幸存区。</p>
+<p>  重GC 全部清完。</p>
+<p><strong>题目：</strong><br>  1.JVM的内存模型和分区~详细到每一个区放什么？<br>  2.堆里面的分区有哪些？<br>  3.GC的算法有哪些？<br>    标记清除法<br>    标记整理<br>    复制算法<br>    引用计数法<br>    怎么用的？<br>  4.轻GC 和 重GC 分别再什么时候发生？</p>
+<p><strong>引用计数法</strong></p>
+<p>  假设我对象A 用了 一次就给它加上1<br>  假设我对象B 用了 两次就给它加上2<br>  假设我对象C 没有使用 就是 0</p>
+<p>  引用计数法就是给每个对象分配一个计数器</p>
+<p>假设C 对象为 0，它就要被清除出去了</p>
+<p>  JVM 现在一般不采用这种方式，不高效。<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/325a6d699d69470e820d03f775017475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/325a6d699d69470e820d03f775017475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/d744ae7f8fbb43ce9cc12e6aab391b61.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/d744ae7f8fbb43ce9cc12e6aab391b61.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h3 id="15-2复制算法"><a href="#15-2复制算法" class="headerlink" title="15.2复制算法"></a>15.2<strong>复制算法</strong></h3><p>  每次GC 都会将 伊甸园区 活得对象 移动到 幸存区 中，如果幸存区放不下 ，就移到养老区中。<br>  一旦伊甸园区被GC 后，就会是空的。<br>  当某对象从伊甸园区 存活下来了。</p>
+<p>  谁空谁是to<br>  假设这个对象还活着，它就把这个对象复制到另一个区域 要么是 form 要么是 to</p>
+<p>  当某个对象 经历15次（默认值）GC 都还没有死的时候，就会进入养老区。</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/821af2ce63844fa39c0d2a8cc1435eb0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/821af2ce63844fa39c0d2a8cc1435eb0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h3 id="15-3图解复制算法"><a href="#15-3图解复制算法" class="headerlink" title="15.3图解复制算法"></a>15.3<strong>图解复制算法</strong></h3><p>  假设 幸存区里面，to 是空的，form 里面有对象。<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/ef302d1f31614a4e8aec5cba0d2fb221.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/ef302d1f31614a4e8aec5cba0d2fb221.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  现在要做一次垃圾回收了<br>  首先：伊甸园区 存活的对象往 to 里面走</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/4ade8f094c894e468a576a996743b98e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/4ade8f094c894e468a576a996743b98e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  其次，form 区里面的 对象也要往 to 里面走<br>  每次清理完之后，伊甸园区是空的，to区是空的。<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/2bb94682abc545b29ef102fe43e4e78e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/2bb94682abc545b29ef102fe43e4e78e.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/1ec0202460cc472e9bfc4a10a000db48.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/1ec0202460cc472e9bfc4a10a000db48.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>  经历15次GC之后，会把幸存区 里面或者的对象 移到养老区</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/dcd9295ed79e4c2385d254f0aab413aa.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/dcd9295ed79e4c2385d254f0aab413aa.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>好处：没有内存的碎片<br>坏事：浪费一半内存的空间：多了一半空间用于是空的。</p>
+<p>赋值算法最佳使用场景：对象存活度较低的时候；新生区</p>
+<hr>
+<h3 id="15-4标记清除算法"><a href="#15-4标记清除算法" class="headerlink" title="15.4标记清除算法"></a>15.4<strong>标记清除算法</strong></h3><p>扫描这些对象，对活着的对象进行标记<br>清除：对没有标记的对象，进行清除</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/67f7cff0b89e4ad39bfb85632e024ad3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/67f7cff0b89e4ad39bfb85632e024ad3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<p>优点：不需要额外的空间<br>缺点：两次扫描严重浪费时间，会产生内存碎片。</p>
+<hr>
+<h3 id="15-5标记压缩"><a href="#15-5标记压缩" class="headerlink" title="15.5标记压缩"></a>15.5<strong>标记压缩</strong></h3><p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/547c3933e3bc4f8b96606e86033b0c3f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center"><img src="https://img-blog.csdnimg.cn/547c3933e3bc4f8b96606e86033b0c3f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMDI1Nzk4,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></a></p>
+<p>在这里插入图片描述</p>
+<hr>
+<h3 id="15-6总结："><a href="#15-6总结：" class="headerlink" title="15.6总结："></a>15.6<strong>总结：</strong></h3><p>  内存效率：复制算法 &gt; 标记清除算法 &gt; 标记压缩算法（时间复杂度）<br>  内存整齐度：复制算法 &#x3D; 标记压缩算法 &gt; 标记清除算法<br>  内存利用率： 标记压缩算法 &#x3D; 标记清除算法 &gt; 复制算法</p>
+<p><strong>没有最优算法吗？</strong><br>  没有；<br>  没有最好的算法，只有最合适的算法~ —-&gt;GC： 分代收集算法<br>  每一代用合适的算法就好了。</p>
+<p>年轻代： （大部分的对象都在这里都死了）<br>  存活率低<br>  复制算法！</p>
+<p>老年代：<br>  存活率高，区域大<br>  标记清除 + 标记压缩 混合实现</p>
+<p>JMM<br>java Memory Model<br>什么是JMM?</p>
+<hr>
+<p><strong>学习方法</strong></p>
+<p>  1.百度<br>  2.思维导图</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>https://lfrok.top/2022/11/27/Java/JVM/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>B612🚀</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月27日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/JDBC/" title="JDBC">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JDBC</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/Mybatis/" title="Mybatis">
+                        <span class="hidden-mobile">Mybatis</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="lv-container" data-id="city" data-uid="MTAyMC8zODU3Mi8xNTEwMA==">
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#lv-container', function() {
+        Fluid.utils.createScript('https://cdn-city.livere.com/js/embed.dist.js');
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Fork</span></a> <strong><i style= color:red>☭ </i></strong> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>B-612</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

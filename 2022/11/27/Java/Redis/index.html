@@ -1,0 +1,1442 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="B612🚀">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1、NoSQL1.1为什么要用Nosql先来点鸡汤 我们现在处于2020年，处于大数据时代；大数据一般的数据库无法进行分析出来了！逼着自己学习！只有不断的学习！这是在这个社会来生存的唯一法则！学习还是为了自己，为了家人！为了让自己过得更加的体面！（1）单机MySQL的年代！   90年代，一个基本的网站访问量一般不会太大，单个数据库完全足够！  那个时候，更多的去使用静态网页 Html ~ 服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="https://lfrok.top/2022/11/27/Java/Redis/index.html">
+<meta property="og:site_name" content="Le Petit Prince">
+<meta property="og:description" content="1、NoSQL1.1为什么要用Nosql先来点鸡汤 我们现在处于2020年，处于大数据时代；大数据一般的数据库无法进行分析出来了！逼着自己学习！只有不断的学习！这是在这个社会来生存的唯一法则！学习还是为了自己，为了家人！为了让自己过得更加的体面！（1）单机MySQL的年代！   90年代，一个基本的网站访问量一般不会太大，单个数据库完全足够！  那个时候，更多的去使用静态网页 Html ~ 服务器">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-27T09:58:46.501Z">
+<meta property="article:modified_time" content="2022-11-27T10:33:46.987Z">
+<meta property="article:author" content="B612🚀">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Redis - Le Petit Prince</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lfrok.top","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>B-612</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/same/">
+                <i class="iconfont icon-twitch-fill"></i>
+                我们
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://pprince.top/bgc/bgc-2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Redis"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-27 17:58" pubdate>
+          2022年11月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          51k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          426 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>1、NoSQL<br>1.1为什么要用Nosql<br>先来点鸡汤</p>
+<p>我们现在处于2020年，处于大数据时代；<br>大数据一般的数据库无法进行分析出来了！<br>逼着自己学习！只有不断的学习！这是在这个社会来生存的唯一法则！<br>学习还是为了自己，为了家人！为了让自己过得更加的体面！<br>（1）单机MySQL的年代！</p>
+<p>  90年代，一个基本的网站访问量一般不会太大，单个数据库完全足够！<br>  那个时候，更多的去使用静态网页 Html ~ 服务器根本没有太大的压力！<br>  思考一下，这种情况下：整个网站的瓶颈是什么？</p>
+<p>数据量如果太大、一个机器放不下了！<br>数据的索引 （B+ Tree），一个机器内存也放不下<br>访问量（读写混合），一个服务器承受不了~<br>只要你开始出现以上的三种情况之一，那么你就必须要晋级！</p>
+<p>（2）、Memcached（缓存） + MySQL + 垂直拆分 （读写分离）<br>  网站80%的情况都是在读，每次都要去查询数据库的话就十分的麻烦！所以说我们希望减轻数据的压 力，我们可以使用缓存来保证效率！</p>
+<p>  发展过程： 优化数据结构和索引–&gt; 文件缓存（IO）—&gt; Memcached（当时最热门的技术！）</p>
+<p>1.2分库分表+水平拆分<br>  技术和业务在发展的同时，对人的要求也越来越高！</p>
+<p>  本质：数据库（读、写）</p>
+<p>  早些年MyISAM： 表锁，十分影响效率！高并发下就会出现严重的锁问题<br>转战Innodb：行锁</p>
+<p>  慢慢的就开始使用分库分表来解决写的压力！ MySQL 在哪个年代推出 了表分区！这个并没有多少公司使用！</p>
+<p>  MySQL 的 集群，很好满足那个年代的所有需求！</p>
+<p>如今最近的年代<br>  2010–2020 十年之间，世界已经发生了翻天覆地的变化；（定位，也是一种数据，音乐，热榜！）<br>MySQL 等关系型数据库就不够用了！数据量很多，变化很快~！</p>
+<p>  MySQL 有的使用它来存储一些比较大的文件，博客，图片！数据库表很大，效率就低了！如果有一种数据库来专门处理这种数据,</p>
+<p>  MySQL压力就变得十分小（研究如何处理这些问题！）大数据的IO压力下，表几乎没法更大！</p>
+<p>目前一个基本的互联网项目！</p>
+<p>为什么要用NoSQL！<br>  用户的个人信息，社交网络，地理位置。用户自己产生的数据，用户日志等等爆发式增长。</p>
+<p>  这时候我们就需要使用NoSQL数据库的，Nosql 可以很好的处理以上的情况。</p>
+<p>1.3什么是NoSql<br>只要学不死，就往死里学！</p>
+<p>  NoSQL &#x3D; Not Only SQL （不仅仅是SQL）<br>  关系型数据库：表格 ，行 ，列</p>
+<p>  泛指非关系型数据库的，随着web2.0互联网的诞生！传统的关系型数据库很难对付web2.0时代！尤其是超大规模的高并发的社区！ 暴露出来很多难以克服的问题，NoSQL在当今大数据环境下发展的十分迅 速，Redis是发展最快的，而且是我们当下必须要掌握的一个技术！</p>
+<p>  很多的数据类型用户的个人信息，社交网络，地理位置。这些数据类型的存储不需要一个固定的格式！ 不需要多月的操作就可以横向扩展的 ！ Map 使用键值对来控制！</p>
+<p>NoSQL 特点<br>  1、方便扩展（数据之间没有关系，很好扩展！）<br>   2、大数据量高性能（Redis 一秒写8万次，读取11万，NoSQL的缓存记录级，是一种细粒度的缓存，性能会比较高！）<br>   3、数据类型是多样型的！（不需要事先设计数据库！随取随用！如果是数据量十分大的表，很多人就无 法设计了！）<br>  4、传统 RDBMS 和 NoSQL<br>传统的 RDBMS</p>
+<ul>
+<li>结构化组织</li>
+<li>SQL</li>
+<li>数据和关系都存在单独的表中</li>
+<li>操作，数据定义语言</li>
+<li>严格的一致性</li>
+<li>基础的事务<br>…<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>NoSQL</li>
+<li>不仅仅是数据</li>
+<li>没有固定的抽象语言</li>
+<li>键值对存储，列存储，文档存储，图形数据库</li>
+<li>最终一致性</li>
+<li>CAP 定理 和BASE （异地多活！）</li>
+<li>高扩展，高可用，高可扩</li>
+<li>…<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>  真正在公司中的实践：NoSQL + RDBMS 一起使用才是最强的，阿里巴巴的架构演进！ 技术没有高低之分，就看你如何去使用！（提升内功，思维的提高！）</li>
+</ul>
+<p>1.4阿里巴巴演进分析<br>思考问题：这么多东西难道都是在一个数据库中的吗?</p>
+<p>技术急不得，越是慢慢学，才能越扎实！<br>1<br>大量公司做的都是相同的业务；（竞品协议）</p>
+<p>随着这样的竞争，业务是越来越完善，然后对于开发者的要求也是越来越高！</p>
+<p>敏捷开发，极限编程</p>
+<p>如果你未来相当一个架构师： 没有什么是加一层解决不了的！</p>
+<p>1、商品的基本信息<br>名称<br>价格<br>商家信息：<br>关系数据库可以解决了（MySql Oracle）阿里云的这群疯子</p>
+<p>2.商品的描述、评论（文字比较多）<br>文档性数据库中， Redis 、MongoDB</p>
+<p>3.图片<br>分布式文件系统 fastdfs</p>
+<p>4.商品的关键字（搜索）<br>搜索引擎 solr elasticsearch<br>所有牛逼的人都有一段苦逼的岁月！但是你只要像SB一样的去坚持，终将牛逼！</p>
+<p>5.商品热门的波段信息<br>内存数据库<br>redis<br>6.商品的交易，外部的支付接口<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>大型互联网应用问题：<br>  数据类型太多了<br>  数据源繁多，经常重构</p>
+<p>2、NoSql的四大分类<br>KV键值对：<br>  新浪：Redis<br>  美团：Redis+Tair<br>  阿里、百度：Redis+Memecache</p>
+<p>文档型数据库(bson格式和json 一样)：<br> MongoDB（一般必须要掌握）<br> MongoDB是基于分布式文件存储的数据库，C++编写的，主要用来处理大量的文档！<br> MongoDB是一个介于关系型数据库和非关系型数据库中中间的产品！MongoDB是非关系型数据</p>
+<p>库中功能最丰富，最像关系型数据库的！<br> ConthDB</p>
+<p>列存储数据库<br> HBase<br> 分布式文件系统</p>
+<p>图像关系数据库<br>  不是存储图形的，放的是关系，比如：朋友圈社交网络，广告推荐！</p>
+<p>四者对比</p>
+<p>3、Redis入门<br>3.1Redis 是什么？<br>  1.（Remote Dictionary Server )，即远程字典服务 !<br>  2.是一个开源的使用ANSI C语言编写、<br>  3.支持网络、<br>  4.可基于内存亦可持久化的日志型、<br>  5.Key-Value数据库，<br>  6.并提供多种语言的API。<br>  7.redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了 master-slave(主从)同步。</p>
+<p>免费和开源！被人们称之为结构化数据库！</p>
+<p>Redis能干嘛？</p>
+<p>  1.内存存储、持久化，内存中是断电即失、所以说持久化很重要（rdb、aof）<br>  2.效率高，可以用于高速缓存<br>  3.发布订阅系统<br>  4.地图信息分析<br>  5.计时器、计数器（浏览量！）</p>
+<p>Redis 特性？<br>  1.多样的数据类型<br>  2.持久化<br>  3.集群<br>  4.事务</p>
+<p>3.2windows 安装Redis<br>1、下载安装包</p>
+<p>2、下载完毕得到压缩包：</p>
+<p>3、解压到自己电脑上的环境目录下的就可以的！Redis 十分的小，只有5M</p>
+<p>4、开启Redis，</p>
+<p>5、使用redis客户单来来连接redis</p>
+<p>3.3Linux 安装Redis<br>1、下载安装包！</p>
+<p>2、解压Redis的安装包！</p>
+<p>tar -zxvf redis-6.2.3.tar.gz<br>1</p>
+<p>3、进入解压后的文件，可以看到我们redis的配置文件</p>
+<p>cd redis-6.2.3&#x2F;<br>1</p>
+<p>4、基本的环境安装</p>
+<p>yum install gcc-c++<br>1<br>分开执行</p>
+<p>make &amp;&amp; make install<br>1</p>
+<p>5、redis的默认安装路径</p>
+<p>whereis redis<br>1</p>
+<p>6、将redis配置文件。复制到我们当前目录下</p>
+<p>cp &#x2F;usr&#x2F;local&#x2F;redis&#x2F;redis.conf .redis.conf<br>1</p>
+<p>7、redis默认不是后台启动的，修改配置文件！<br>设置为yes</p>
+<p>8、启动Redis服务！</p>
+<p>cd &#x2F;usr&#x2F;local&#x2F;redis&#x2F;bin&#x2F;<br>1<br>&#x2F;home&#x2F;wrz&#x2F;redis-6.2.3&#x2F;redis.conf 这个路径是前面把conf 文件复制的路径</p>
+<p>.&#x2F;redis-server ..&#x2F;redis.conf<br>1</p>
+<p>9、使用redis-cli 进行连接测试！</p>
+<p>redis-cli -p 6379<br>1</p>
+<p>10、查看redis的进程是否开启！</p>
+<p>ps -ef | grep redis<br>1</p>
+<p>11、如何关闭Redis服务呢？<br>关闭redis</p>
+<p>shutdown<br>1<br>退出redis</p>
+<p>exit<br>1</p>
+<p>12、再次查看进程是否存在</p>
+<p>ps -ef | grep redis<br>1</p>
+<p>3.4性能测试<br>redis-benchmark 是一个压力测试工具！<br>官方自带的性能测试工具！<br>redis-benchmark 命令参数</p>
+<p>简单测试</p>
+<p>测试 100个并发连接 100000<br>redis-benchmark -h localhost -p 6379 -c 100 -n 100000<br>1<br>2</p>
+<p>3.5Redis 是单线程的<br>  明白redis 是很快的，官方表示，Redis是基于内存操作的，CPU不是Redis的性能瓶颈，Redis的瓶颈是根据机器的的内存和网络带宽，既可以使用单线程来实现，就使用单线程了！</p>
+<p>Redis 为什么单线程还这么快？<br>  Redis是C语言写的，官方提供数据为100000+的QPS，完全不比同样式使用key-alue的Memecache差！<br>  误区1：高性能的服务器一定是多线程的？<br>  误区2：多线程（CPU上下文会切换！）一定比单线程效率高！<br>  CPU、内存、硬盘的速度要有所了解<br>  CPU》内存》硬盘<br>  核心：Redis 是将所有的数据全部放在内存中的，所以说使用单线程去操作效率就是最高的，多线程（CPU上下文会切换：耗时的操作！！！），对内存系统来说，如果没有上下文切换效率就是最高的！多次读写都是在一个CPU上的，在内存情况下，这就是最佳的方案！</p>
+<p>4、Redis基本知识<br>redis默认有16个数据库</p>
+<p>默认使用第0个</p>
+<p>可以使用 select 进行切换数据库！</p>
+<p>查看db大小！</p>
+<p>dbsize<br>1</p>
+<p>查看所有的key</p>
+<p>keys *<br>1</p>
+<p>清空当前数据库</p>
+<p>flushdb<br>1</p>
+<p>清空所有数据库</p>
+<p>flushdball<br>1</p>
+<p>5、Redis操作<br>5.1Key操作<br>set<br>get<br>exists<br>move<br>ttl<br>type<br>keys *<br>#设置<br>set XXX</p>
+<p>#获取<br>get XXX</p>
+<p>#判断当前key 是否存在<br>exists XXX</p>
+<p>#移除某个key<br>move xxx 1</p>
+<p>#设置某个key 自动过期<br>expire xxx 过期时间（秒）</p>
+<p>#查看还有多少秒过期<br>ttl xxx<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>127.0.0.1:6379&gt; keys * #查看所有key<br>(empty array)<br>127.0.0.1:6379&gt; set name xianyan #设置key 值 为xianyan<br>OK<br>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“name”<br>127.0.0.1:6379&gt; set age a #设置key 值为a<br>OK<br>127.0.0.1:6379&gt; keys *</li>
+<li>“age”</li>
+<li>“name”<br>127.0.0.1:6379&gt; exists name #判断当前key 是否存在 1 为存在<br>(integer) 1<br>127.0.0.1:6379&gt; move name 1 #移除当前key<br>(integer) 1<br>127.0.0.1:6379&gt; keys *</li>
+<li>“age”<br>127.0.0.1:6379&gt; keys *</li>
+<li>“age”<br>127.0.0.1:6379&gt; set name xy<br>OK<br>127.0.0.1:6379&gt; get name<br>“xy”<br>127.0.0.1:6379&gt; expire name 10 #设置当前key 过期时间，单位为秒<br>(integer) 1<br>127.0.0.1:6379&gt; ttl name #查看该key 还有多长时间过期<br>(integer) 4<br>127.0.0.1:6379&gt; ttl name<br>(integer) 1<br>127.0.0.1:6379&gt; ttl name<br>(integer) -2<br>127.0.0.1:6379&gt; get name<br>(nil)<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>expire 用途：单点登录</li>
+</ol>
+<p>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“age”<br>127.0.0.1:6379&gt; type name #查看当前key 的类型<br>none<br>127.0.0.1:6379&gt; set name xiany<br>OK<br>127.0.0.1:6379&gt; type name<br>string<br>127.0.0.1:6379&gt; type age<br>string<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>5.2String类型<br>90% 的java程序员使用redis 只会使用一个String 类型</li>
+</ol>
+<p>set<br>get<br>mset<br>mget<br>keys *<br>exists<br>append<br>strlen<br>incr<br>decr<br>incrby<br>decrby<br>getrange<br>setrange<br>setex<br>setnx<br>getset<br>127.0.0.1:6379&gt; set key1 v1 #设置值<br>OK<br>127.0.0.1:6379&gt; get key1 #获得值<br>“v1”<br>127.0.0.1:6379&gt; keys * #获得所有key</p>
+<ol>
+<li>“key1”<br>127.0.0.1:6379&gt; exists key1 #判断某个key是否存在<br>(integer) 1<br>127.0.0.1:6379&gt; append key1 “hello” #追加字符串，如果key 不存在，就相当于set key<br>(integer) 7<br>127.0.0.1:6379&gt; get key1<br>“v1hello”<br>127.0.0.1:6379&gt; strlen key1 #获取key 长度<br>(integer) 7<br>127.0.0.1:6379&gt; append key1 ‘xianyan’<br>(integer) 14<br>127.0.0.1:6379&gt; get key1<br>“v1helloxianyan”<br>127.0.0.1:6379&gt; strlen key1<br>(integer) 14<br>127.0.0.1:6379&gt;<br>y<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>自增</li>
+</ol>
+<p>i++<br>步长 i+&#x3D;<br>127.0.0.1:6379&gt; set views 0 #初始浏览量为0<br>OK<br>127.0.0.1:6379&gt; get views<br>“0”<br>127.0.0.1:6379&gt; incr views #自增1 浏览量+1<br>(integer) 1<br>127.0.0.1:6379&gt; incr views<br>(integer) 2<br>127.0.0.1:6379&gt; get views<br>“2”<br>127.0.0.1:6379&gt; decr views #自减1<br>(integer) 1<br>127.0.0.1:6379&gt; decr views<br>(integer) 0<br>127.0.0.1:6379&gt; get views<br>“0”<br>127.0.0.1:6379&gt; incrby views 10 # 设置步长，指定增量<br>(integer) 10<br>127.0.0.1:6379&gt; decrby views 5<br>(integer) 5<br>127.0.0.1:6379&gt; incrby views 10<br>(integer) 15<br>127.0.0.1:6379&gt; decrby views 1<br>(integer) 14<br>127.0.0.1:6379&gt; get views<br>“14”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>字符串范围</p>
+<p>127.0.0.1:6379&gt; set key1 “hello,xy” #设置key1的值<br>OK<br>127.0.0.1:6379&gt; get key1<br>“hello,xy”<br>127.0.0.1:6379&gt; getrange key1 0 3 #截取字符串，区间的【0,1,2,3】<br>“hell”<br>127.0.0.1:6379&gt; getrange key1 0 -1 #获取全部字符串 和get key 是一样的<br>“hello,xy”<br>替换字符串<br>127.0.0.1:6379&gt; set key2 abcdef<br>OK<br>127.0.0.1:6379&gt; get key2<br>“abcdef”<br>127.0.0.1:6379&gt; setrange key2 1 xx #替换指定位置开始的字符串<br>(integer) 6<br>127.0.0.1:6379&gt; get key2<br>“axxdef”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>当前这个值不存在<br>  setex设置过期时间<br>  setnx不存在设置，（在分布式锁中会常常使用！）</p>
+<p>127.0.0.1:6379&gt; setex key3 30 “hello” #设置key3的值为hello，30秒后过期<br>OK<br>127.0.0.1:6379&gt; get key3<br>“hello”<br>127.0.0.1:6379&gt; setnx mykey “redis” #如果mykey不存在，创建mykey<br>(integer) 1<br>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“key1”</li>
+<li>“mykey”</li>
+<li>“key3”</li>
+<li>“key2”<br>127.0.0.1:6379&gt; ttl key3<br>(integer) -2 #过期了，返回-2<br>127.0.0.1:6379&gt; setnx mykey “mongodb” #不存在就设置为 mongodb<br>(integer) 0<br>127.0.0.1:6379&gt; get mykey #这个值存在 所以还是redis<br>“redis”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>批量设置<br>  mset<br>  mget</li>
+</ol>
+<p>127.0.0.1:6379&gt; keys *<br>(empty array)<br>127.0.0.1:6379&gt; mset key1 v1 key2 v2 key3 v3 #同时设置多个值<br>OK<br>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“key1”</li>
+<li>“key3”</li>
+<li>“key2”<br>127.0.0.1:6379&gt; mget key1 key2 key3 #同时获取多个值</li>
+<li>“v1”</li>
+<li>“v2”</li>
+<li>“v3”</li>
+</ol>
+<p>#msetnx 是一个原子性的操作，要么一起成功，要么一起失败！<br>127.0.0.1:6379&gt; msetnx key1 v1 key4 v4<br>(integer) 0<br>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“key1”</li>
+<li>“key3”</li>
+<li>“key2”<br>127.0.0.1:6379&gt; get key4<br>(nil)<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>对象</li>
+</ol>
+<p>#设置一个user:1 对象，值为json字符串来保存一个对象！<br>127.0.0.1:6379&gt; set user:1 {name:xy,age:3}<br>OK<br>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“key1”</li>
+<li>“user:1”</li>
+<li>“key3”</li>
+<li>“key2”<br>127.0.0.1:6379&gt; get user:1<br>“{name:xy,age:3}”<br>127.0.0.1:6379&gt;</li>
+</ol>
+<p>127.0.0.1:6379&gt; mset user:2:name xianyan user:2:age 3<br>OK<br>127.0.0.1:6379&gt; get user:2:name<br>“xianyan”<br>127.0.0.1:6379&gt; mget user:2:name user:2:age</p>
+<ol>
+<li>“xianyan”</li>
+<li>“3”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>get set 先获取再设置</li>
+</ol>
+<p>127.0.0.1:6379&gt; getset db redis #获取不存在值，则返回 nil<br>(nil)<br>127.0.0.1:6379&gt; get db<br>“redis”<br>127.0.0.1:6379&gt; getset db “mongodb” #获取原来的值，并设置新的值<br>“redis”<br>127.0.0.1:6379&gt; get db<br>“mongodb”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>数据结构是相同的！<br>String类型的使用场景：value除了是我们的字符串还可以是我们的数字<br>计数器<br>统计多单位的数量<br>分数数<br>对象缓存存储！<br>5.3List（列表）<br>基本数据类型，列表</p>
+<p>  在redis里面，可以把list完成，栈，队列，阻塞队列！<br>  所有的list命令都是用l开头的，Redis不区分大小写</p>
+<p>lpush #将一个值，或者多个值插入到列表的头部<br>lrange<br>lpop<br>rpop<br>llen<br>lrem<br>lrange<br>ltrim<br>rpush<br>rpoplpush<br>linsert<br>lset<br>lindex<br>左</p>
+<p>127.0.0.1:6379&gt; lpush list one #将一个值，或者多个值插入到列表的头部<br>(integer) 1<br>127.0.0.1:6379&gt; lpush list two<br>(integer) 2<br>127.0.0.1:6379&gt; lpush list three<br>(integer) 3<br>127.0.0.1:6379&gt; lrange list 0 -1 #获取list中的值</p>
+<ol>
+<li>“three”</li>
+<li>“two”</li>
+<li>“one”<br>127.0.0.1:6379&gt; lrange list 0 1 #通过区间获取具体的值</li>
+<li>“three”</li>
+<li>“two”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>右</li>
+</ol>
+<p>127.0.0.1:6379&gt; rpush list right #将一个值，或多个值插入到列表的尾部<br>(integer) 4<br>127.0.0.1:6379&gt; lrange list 0 -1</p>
+<ol>
+<li>“three”</li>
+<li>“two”</li>
+<li>“one”</li>
+<li>“right”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>移除</li>
+</ol>
+<p>127.0.0.1:6379&gt; lrange list 0 -1</p>
+<ol>
+<li>“three”</li>
+<li>“two”</li>
+<li>“one”</li>
+<li>“right”<br>127.0.0.1:6379&gt; lpop list #移除列表的第一个元素<br>“three”<br>127.0.0.1:6379&gt; rpop list #移除list的最后一个元素<br>“right”<br>127.0.0.1:6379&gt; lrange list 0 -1</li>
+<li>“two”</li>
+<li>“one”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>通过下标获取list中的某一个值</li>
+</ol>
+<p>127.0.0.1:6379&gt; lrange list 0 -1</p>
+<ol>
+<li>“two”</li>
+<li>“one”<br>127.0.0.1:6379&gt; lindex list 1<br>“one”<br>127.0.0.1:6379&gt; lindex list 0<br>“two”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>获取list长度</li>
+</ol>
+<p>127.0.0.1:6379&gt; llen list #获取list的长度<br>(integer) 2<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>移除指定的值<br>  取关 uid<br>  lrem</p>
+<p>127.0.0.1:6379&gt; lrange list 0 -1</p>
+<ol>
+<li>“four”</li>
+<li>“three”</li>
+<li>“three”</li>
+<li>“two”</li>
+<li>“one”<br>127.0.0.1:6379&gt; lrem list 1 one #移除list集合中指定个数的value<br>(integer) 1<br>127.0.0.1:6379&gt; lrange list 0 -1</li>
+<li>“four”</li>
+<li>“three”</li>
+<li>“three”</li>
+<li>“two”<br>127.0.0.1:6379&gt; lrem list 2 three<br>(integer) 2<br>127.0.0.1:6379&gt; lrange list 0 -1</li>
+<li>“four”</li>
+<li>“two”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>trim 修剪操作：list 截断</li>
+</ol>
+<p>127.0.0.1:6379&gt; lrange mylist 0 -1</p>
+<ol>
+<li>“hello”</li>
+<li>“hello1”</li>
+<li>“hello2”</li>
+<li>“hello3”<br>127.0.0.1:6379&gt; ltrim mylist 1 2 #通过下标，截取指定的长度<br>OK<br>127.0.0.1:6379&gt; lrange mylist 0 -1</li>
+<li>“hello1”</li>
+<li>“hello2”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>list 已经被改变了，截断了只剩下截取额元素！</li>
+</ol>
+<p>移除列表的最后一个元素，并将被移除的元素添加到新的列表中</p>
+<p>127.0.0.1:6379&gt; rpush mylist hello hello1 hello2<br>(integer) 3<br>127.0.0.1:6379&gt; rpoplpush mylist myother #移除列表的最后一个元素，并将被移除的元素添加到新的列表中<br>“hello2”<br>127.0.0.1:6379&gt; lrange mylist 0 -1 #查看当前列表</p>
+<ol>
+<li>“hello”</li>
+<li>“hello1”<br>127.0.0.1:6379&gt; lrange myother 0 -1 #查看目标列表中，确实存在该值</li>
+<li>“hello2”<br>lset 将列表中指定下标的值，替换为另外一个值，更新操作，必须存在要更新的列表<br>127.0.0.1:6379&gt; lpush list value<br>(integer) 1<br>127.0.0.1:6379&gt; lrange list 0 0</li>
+<li>“value”<br>127.0.0.1:6379&gt; lset list 0 item<br>OK<br>127.0.0.1:6379&gt; lrange list 0 0</li>
+<li>“item”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>linsert 插入元素，将某个具体的value 插入到列表中某个元素的前面或者后面</li>
+</ol>
+<p>127.0.0.1:6379&gt; linsert list before “item” “other” #在 item 后面插入元素<br>(integer) 2<br>127.0.0.1:6379&gt; lrange list 0 -1</p>
+<ol>
+<li>“other”</li>
+<li>“item”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>总结：</li>
+</ol>
+<p>它实际上是一个链表，before Node after，list right 都可以插入值<br>如果可以不存在，创建新的链表<br>如果key存在，新增内容<br>如果移除了所有值，空链表，也代表不存在<br>在两边插入或者改动值，效率最高！中间元素，相对来说效率会低一点<br>5.4.Set （集合）<br>set中的值是不能重复的</p>
+<p>sadd<br>smembers<br>sismember<br>scard<br>sadd<br>srem<br>srem<br>srandmember<br>spop<br>smove<br>sdiff<br>sinter<br>sunion<br>127.0.0.1:6379&gt; sadd myset hello #set集合中添加元素<br>(integer) 1<br>127.0.0.1:6379&gt; sadd myset xianyan<br>(integer) 1<br>127.0.0.1:6379&gt; sadd myset xy<br>(integer) 1</p>
+<p>127.0.0.1:6379&gt; smembers myset #查看指定set 中的所有值</p>
+<ol>
+<li>“xianyan”</li>
+<li>“xy”</li>
+<li>“hello”<br>127.0.0.1:6379&gt; sismember myset hello #判断一个值在不在set 集合中<br>(integer) 1<br>127.0.0.1:6379&gt; sismember myset word<br>(integer) 0<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>scard 获取set 集合中元素的个数</li>
+</ol>
+<p>127.0.0.1:6379&gt; scard myset<br>(integer) 3<br>127.0.0.1:6379&gt; sadd myset xy<br>(integer) 0<br>127.0.0.1:6379&gt; sadd myset xy2<br>(integer) 1<br>127.0.0.1:6379&gt; scard myset<br>(integer) 4<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>srem 移除set 集合中的指定元素</p>
+<p>127.0.0.1:6379&gt; srem myset hello<br>(integer) 1<br>127.0.0.1:6379&gt; scard myset<br>(integer) 3<br>127.0.0.1:6379&gt; smembers myset</p>
+<ol>
+<li>“xy2”</li>
+<li>“xianyan”</li>
+<li>“xy”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>set 无序，不重复集合<br>抽随机</li>
+</ol>
+<p>127.0.0.1:6379&gt; srandmember myset #随机抽选出一个元素<br>“xianyan”<br>127.0.0.1:6379&gt; srandmember myset<br>“xianyan”<br>127.0.0.1:6379&gt; srandmember myset<br>“xy2”<br>127.0.0.1:6379&gt; srandmember myset<br>“xianyan”<br>127.0.0.1:6379&gt; srandmember myset<br>“xy2”</p>
+<p>127.0.0.1:6379&gt; srandmember myset 2 #随机抽选出指定个数的元素</p>
+<ol>
+<li>“xy2”</li>
+<li>“xy”<br>127.0.0.1:6379&gt; srandmember myset 2</li>
+<li>“xy2”</li>
+<li>“xianyan”<br>127.0.0.1:6379&gt; srandmember myset 2</li>
+<li>“xy2”</li>
+<li>“xianyan”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>删除指定的key<br>随机删除一个key</li>
+</ol>
+<p>127.0.0.1:6379&gt; smembers myset</p>
+<ol>
+<li>“xy2”</li>
+<li>“xianyan”</li>
+<li>“xy”<br>127.0.0.1:6379&gt; spop myset #随机删除一个set 集合中的元素<br>“xy2”<br>127.0.0.1:6379&gt; spop myset<br>“xy”<br>127.0.0.1:6379&gt; smembers myset</li>
+<li>“xianyan”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>将一个指定的值，移动到另外一个set 集合</li>
+</ol>
+<p>127.0.0.1:6379&gt; smembers myset</p>
+<ol>
+<li>“world”</li>
+<li>“xy”</li>
+<li>“hello”<br>127.0.0.1:6379&gt; smembers myset2</li>
+<li>“set2”<br>127.0.0.1:6379&gt; smove myset myset2 xy<br>(integer) 1<br>127.0.0.1:6379&gt; smembers myset</li>
+<li>“world”</li>
+<li>“hello”<br>127.0.0.1:6379&gt; smembers myset2</li>
+<li>“xy”</li>
+<li>“set2”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>微博，B站，共同关注！（并集）<br>数字集合类：<br>  1.差集<br>  2.交集<br>  3.并集</li>
+</ol>
+<p>127.0.0.1:6379&gt; sadd key1 a<br>(integer) 1<br>127.0.0.1:6379&gt; sadd key1 b<br>(integer) 1<br>127.0.0.1:6379&gt; sadd key1 c<br>(integer) 1<br>127.0.0.1:6379&gt; sadd key2 c<br>(integer) 1<br>127.0.0.1:6379&gt; sadd key2 d<br>(integer) 1<br>127.0.0.1:6379&gt; sadd key2 e<br>(integer) 1<br>127.0.0.1:6379&gt; sdiff key1 key2 #差集</p>
+<ol>
+<li>“b”</li>
+<li>“a”<br>127.0.0.1:6379&gt; sinter key1 key2 #交集 共同好友这样实现</li>
+<li>“c”<br>127.0.0.1:6379&gt; sunion key1 key2 #并集</li>
+<li>“c”</li>
+<li>“e”</li>
+<li>“b”</li>
+<li>“a”</li>
+<li>“d”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>微博，A用户将所有关注的人放在一个set 集合中，将它的粉丝也放在一个集合中，<br>共同关注<br>共同爱好<br>二度好友（六度分隔理论）<br>推荐好友<br>5.5Hash（map集合）<br>Map集合，key-map！时候这种值是个map 集合！</li>
+</ol>
+<p>hset<br>hmset<br>hmget<br>hgetall<br>hdel<br>hlen<br>hexists<br>hkeys<br>hincrby<br>hsetnx<br>127.0.0.1:6379&gt; hset myhash file1 xy #set 一个具体key -value<br>(integer) 1<br>127.0.0.1:6379&gt; hget myhash file1 #获取一个字段值<br>“xy”<br>127.0.0.1:6379&gt; hmset myhash file1 hello filed2 world #set 多个 key-value<br>OK<br>127.0.0.1:6379&gt; hmget myhash file1 filed2 #获取多个字段值</p>
+<ol>
+<li>“hello”</li>
+<li>“world”<br>127.0.0.1:6379&gt; hgetall myhash #获取全部数据</li>
+<li>“file1”</li>
+<li>“hello”</li>
+<li>“filed2”</li>
+<li>“world”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>删除</li>
+</ol>
+<p>127.0.0.1:6379&gt; hgetall myhash</p>
+<ol>
+<li>“file1”</li>
+<li>“hello”</li>
+<li>“filed2”</li>
+<li>“world”<br>127.0.0.1:6379&gt; hdel myhash filed2 #删除hash指定key字段！对应的value消失了<br>(integer) 1<br>127.0.0.1:6379&gt; hgetall myhash</li>
+<li>“file1”</li>
+<li>“hello”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>获取hash表的字段长度</li>
+</ol>
+<p>127.0.0.1:6379&gt; hlen myhash<br>(integer) 1<br>127.0.0.1:6379&gt; hmset myhash file1 hello file2 world<br>OK<br>127.0.0.1:6379&gt; hgetall myhash</p>
+<ol>
+<li>“file1”</li>
+<li>“hello”</li>
+<li>“file2”</li>
+<li>“world”<br>127.0.0.1:6379&gt;<br>127.0.0.1:6379&gt; hlen myhash<br>(integer) 2<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>判断hash 中指定字段是否存在！</li>
+</ol>
+<p>127.0.0.1:6379&gt; hexists myhash file1<br>(integer) 1<br>127.0.0.1:6379&gt; hexists myhash file3<br>(integer) 0<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>只获得所有的 key<br>只获得所有的value</p>
+<p>127.0.0.1:6379&gt; hkeys myhash</p>
+<ol>
+<li>“file1”</li>
+<li>“file2”<br>127.0.0.1:6379&gt; hvals myhash</li>
+<li>“hello”</li>
+<li>“world”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>incr<br>decr</li>
+</ol>
+<p>127.0.0.1:6379&gt; hset myhash file3 5 #指定数量<br>(integer) 1<br>127.0.0.1:6379&gt; hincrby myhash file3 1<br>(integer) 6<br>127.0.0.1:6379&gt; hincrby myhash file3 -1<br>(integer) 5<br>127.0.0.1:6379&gt; hsetnx myhash file4 hello #如果不存在则可以设置<br>(integer) 1<br>127.0.0.1:6379&gt; hsetnx myhash file4 word #如果存在则不能设置<br>(integer) 0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>  hash变更的数据user name age ，尤其是用户信息之类，经常变动的信息！hash 更适合对象的存储，String 更适合字符串</p>
+<p>127.0.0.1:6379&gt; hset user:1 name xy<br>(integer) 1<br>127.0.0.1:6379&gt; keys *</p>
+<ol>
+<li>“user:1”</li>
+<li>“myhash”<br>127.0.0.1:6379&gt; hget user:1 name<br>“xy”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>5.6Zset（有序集合）<br>在set的基础上，增加一个值，set k1 v1<br>zset k1 score1 v1</li>
+</ol>
+<p>zadd<br>zrange<br>zrangebyscore<br>zrem<br>zcount<br>zrevrange<br>127.0.0.1:6379&gt; zadd myset 1 one #添加一个值<br>(integer) 1<br>127.0.0.1:6379&gt;<br>127.0.0.1:6379&gt; zadd myset 2 two 3 three #添加多个值<br>(integer) 2<br>127.0.0.1:6379&gt; zrange myset 0 -1</p>
+<ol>
+<li>“one”</li>
+<li>“two”</li>
+<li>“three”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>排序实现</li>
+</ol>
+<p>127.0.0.1:6379&gt; zrange myset 0 -1</p>
+<ol>
+<li>“one”</li>
+<li>“two”</li>
+<li>“three”<br>127.0.0.1:6379&gt; zadd salary 2500 xiaohuang #添加三个用户<br>(integer) 1<br>127.0.0.1:6379&gt; zadd salary 5000 zhangsan<br>(integer) 1<br>127.0.0.1:6379&gt; zadd salary 500 xy<br>(integer) 1<br>127.0.0.1:6379&gt; zrangebyscore salary -inf +inf #显示所有用户，从小到大</li>
+<li>“xy”</li>
+<li>“xiaohuang”</li>
+<li>“zhangsan”<br>127.0.0.1:6379&gt; zrangebyscore salary 0 -1<br>(empty array)<br>127.0.0.1:6379&gt; zrangebyscore salary 0 -1 with scores<br>(error) ERR syntax error<br>127.0.0.1:6379&gt; zrangebyscore salary 0 -1 withscores<br>(empty array)<br>127.0.0.1:6379&gt; zrangebyscore salary +inf -inf<br>(empty array)<br>127.0.0.1:6379&gt; zrangebyscore salary -inf +inf</li>
+<li>“xy”</li>
+<li>“xiaohuang”</li>
+<li>“zhangsan”<br>127.0.0.1:6379&gt; zrangebyscore salary 0 -1<br>(empty array)</li>
+</ol>
+<p>#显示全部的用户并附带成绩<br>127.0.0.1:6379&gt; zrangebyscore salary -inf +inf withscores</p>
+<ol>
+<li>“xy”</li>
+<li>“500”</li>
+<li>“xiaohuang”</li>
+<li>“2500”</li>
+<li>“zhangsan”</li>
+<li>“5000”</li>
+</ol>
+<p>#显示工资小于2500员工的升序排序<br>127.0.0.1:6379&gt; zrangebyscore salary -inf 2500 withscores</p>
+<ol>
+<li>“xy”</li>
+<li>“500”</li>
+<li>“xiaohuang”</li>
+<li>“2500”<br>127.0.0.1:6379&gt; zrangebyscore salary +inf -inf<br>(empty array)<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>移除rem中的元素</li>
+</ol>
+<p>127.0.0.1:6379&gt; zrange salary 0 -1</p>
+<ol>
+<li>“xy”</li>
+<li>“xiaohuang”</li>
+<li>“zhangsan”<br>127.0.0.1:6379&gt; zrem salary xiaohuang #移除有序集合中的指定元素<br>(integer) 1<br>127.0.0.1:6379&gt; zrange salary 0 -1</li>
+<li>“xy”</li>
+<li>“zhangsan”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>获取有序集合中的个数</li>
+</ol>
+<p>127.0.0.1:6379&gt; zcard salary<br>(integer) 2<br>1<br>2<br>从大到小进行排序</p>
+<p>127.0.0.1:6379&gt; zrevrange salary 0 -1 #从大到小进行排序</p>
+<ol>
+<li>“zhangsan”</li>
+<li>“xy”<br>1<br>2<br>3<br>zcount 获取指定区间的成员数量</li>
+</ol>
+<p>127.0.0.1:6379&gt; zadd myset 1 hello<br>(integer) 1<br>127.0.0.1:6379&gt; zadd myset 2 world 3 xy #获取指定区间的成员数量<br>(integer) 2<br>127.0.0.1:6379&gt; zcount myset 1 3<br>(integer) 3<br>127.0.0.1:6379&gt; zcount myset 1 2<br>(integer) 2<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>案例思路：<br>  set 排序 存储班级成绩表，工资表排序！<br>  普通消息，1，重要消息2，带权重判断</p>
+<p>6、geospatial 地理位置<br>  朋友的定位，附近的人，打车距离计算？<br>  Redis 的Geo 在Redis 3.2版本 就推出了！这个功能可以推算地理位置的信息，两地之间的距离，方圆几里的人！</p>
+<p>只有六个命令</p>
+<p>添加地理位置<br>规则：两级无法直接添加，一般下载城市数据，直接通过java程序 一次性导入！<br>参数 key 值（）<br>geoadd</p>
+<p>127.0.0.1:6379&gt; geoadd china:city: 116.40 39.90 beijing<br>(integer) 1<br>127.0.0.1:6379&gt; geoadd china:city: 121.47 31.23 shanghai<br>(integer) 1<br>127.0.0.1:6379&gt; geoadd china:city: 106.50 29.53 chongqing<br>(integer) 1<br>127.0.0.1:6379&gt; geoadd china:city: 114.08 22.53 shenzhen<br>(integer) 1<br>127.0.0.1:6379&gt; geoadd china:city 120.16 30.24 hangzhou 108.96 34.26 xian<br>(integer) 2<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>geopos<br>获取当前定位，一定是一个坐标值！</p>
+<p>127.0.0.1:6379&gt; geopos china:city: beijing #获取指定的城市的经度和纬度！</p>
+<ol>
+<li><ol>
+<li>“116.39999896287918091”</li>
+<li>“39.90000009167092543”<br>127.0.0.1:6379&gt; geopos china:city: shanghai</li>
+</ol>
+</li>
+<li><ol>
+<li>“121.47000163793563843”</li>
+<li>“31.22999903975783553”<br>127.0.0.1:6379&gt; geopos china:city: chongqing shenzhen hangzhou</li>
+</ol>
+</li>
+<li><ol>
+<li>“106.49999767541885376”</li>
+<li>“29.52999957900659211”</li>
+</ol>
+</li>
+<li><ol>
+<li>“114.08000081777572632”</li>
+<li>“22.52999956292396888”</li>
+</ol>
+</li>
+<li>(nil)<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>两人之间的距离</li>
+</ol>
+<p>返回两个给定位置之间的距离。<br>如果两个位置之间的其中一个不存在， 那么命令返回空值。<br>指定单位的参数 unit 必须是以下单位的其中一个：<br>m 表示单位为米。<br>km 表示单位为千米。<br>mi 表示单位为英里。<br>ft 表示单位为英尺。<br>如果用户没有显式地指定单位参数， 那么 GEODIST 默认使用米作为单位。</p>
+<h1 id="查看重庆到北京的直线距离"><a href="#查看重庆到北京的直线距离" class="headerlink" title="查看重庆到北京的直线距离"></a>查看重庆到北京的直线距离</h1><p>127.0.0.1:6379&gt; geodist china:city: chongqing beijing km<br>“1464.0708”</p>
+<h1 id="查看北京到上海的直线距离"><a href="#查看北京到上海的直线距离" class="headerlink" title="查看北京到上海的直线距离"></a>查看北京到上海的直线距离</h1><p>127.0.0.1:6379&gt; geodist china:city: beijing shanghai km<br>“1067.3788”<br>1<br>2<br>3<br>4<br>5<br>6<br>  georadius 以给定的经纬度为中心，找出某一半内的元素<br>  我附近的人？（获取所有附近的人的地址，定位！） 通过半径来查询！<br>  所有的数据应该都录入：China:city: 才会让结构更加请求！</p>
+<p>#以110 30 这个经纬度为中心，寻找方圆1000km内的城市<br>127.0.0.1:6379&gt; georadius china:city: 110 30 1000 km</p>
+<ol>
+<li>“chongqing”</li>
+<li>“shenzhen”<br>127.0.0.1:6379&gt; georadius china:city: 110 30 600 km</li>
+<li>“chongqing”<br>127.0.0.1:6379&gt; georadius china:city: 110 30 500 km</li>
+<li>“chongqing”</li>
+</ol>
+<h1 id="显示到中间距离的位置"><a href="#显示到中间距离的位置" class="headerlink" title="显示到中间距离的位置"></a>显示到中间距离的位置</h1><p>127.0.0.1:6379&gt; georadius china:city: 110 30 500 km withdist</p>
+<ol>
+<li><ol>
+<li>“chongqing”</li>
+<li>“341.9374”</li>
+</ol>
+</li>
+</ol>
+<h1 id="显示他人的定位信息"><a href="#显示他人的定位信息" class="headerlink" title="显示他人的定位信息"></a>显示他人的定位信息</h1><p>127.0.0.1:6379&gt; georadius china:city: 110 30 1000 km withdist withcoord</p>
+<ol>
+<li><ol>
+<li>“chongqing”</li>
+<li>“341.9374”</li>
+<li><ol>
+<li>“106.49999767541885376”</li>
+<li>“29.52999957900659211”</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>“shenzhen”</li>
+<li>“924.9425”</li>
+<li><ol>
+<li>“114.08000081777572632”</li>
+<li>“22.52999956292396888”<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>获取指定数量的人，200</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="筛选出指定的结果"><a href="#筛选出指定的结果" class="headerlink" title="筛选出指定的结果"></a>筛选出指定的结果</h1><p>127.0.0.1:6379&gt; georadius china:city: 110 30 1000 km withdist withcoord count 1</p>
+<ol>
+<li><ol>
+<li>“chongqing”</li>
+<li>“341.9374”</li>
+<li><ol>
+<li>“106.49999767541885376”</li>
+<li>“29.52999957900659211”<br>127.0.0.1:6379&gt; georadius china:city: 110 30 1000 km withdist withcoord count 2</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>“chongqing”</li>
+<li>“341.9374”</li>
+<li><ol>
+<li>“106.49999767541885376”</li>
+<li>“29.52999957900659211”</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>“shenzhen”</li>
+<li>“924.9425”</li>
+<li><ol>
+<li>“114.08000081777572632”</li>
+<li>“22.52999956292396888”<br>127.0.0.1:6379&gt; georadius china:city: 110 30 1000 km withdist withcoord count 3</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>“chongqing”</li>
+<li>“341.9374”</li>
+<li><ol>
+<li>“106.49999767541885376”</li>
+<li>“29.52999957900659211”</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>“shenzhen”</li>
+<li>“924.9425”</li>
+<li><ol>
+<li>“114.08000081777572632”</li>
+<li>“22.52999956292396888”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>georadiusbymember<br>  这个命令和 GEORADIUS 命令一样， 都可以找出位于指定范围内的元素， 但是 GEORADIUSBYMEMBER 的中心点是由给定的位置元素决定的， 而不是像 GEORADIUS 那样， 使用输入的经度和纬度来决定中心点，指定成员的位置被用作查询的中心</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>#找出位于指定元素周围的<br>127.0.0.1:6379&gt; georadiusbymember china:city: beijing 1000 km</p>
+<ol>
+<li>“beijing”<br>127.0.0.1:6379&gt; georadiusbymember china:city: shanghai 400 km</li>
+<li>“shanghai”<br>1<br>2<br>3<br>4<br>5<br>7、Hyperloglog<br>什么是基数?<br>  A{1,3,5,6,8,7}<br>  B{1,3,5,7,8}<br>  基数（不重复的数）&#x3D;5，可以接受误差！</li>
+</ol>
+<p>简介<br>  Redis2.8.9版本更新了Hyperloglog 数据结构！<br>  Redis Hyperloglog 基数统计的算法！<br>  优点：占用的内存是固定的，2^64 不同的元素技术，只需要12kb内存！如果要从内存角度来比较的话 Hyperloglog 首选！</p>
+<p>网页的UV（一个人访问网站多次，但是还算是一个人）</p>
+<p>  传统方式，set 保存用户的id，然后就可以统计set 中的元素 数量作为判断！<br>  这个方式如果保存大量的用户id，就会比较麻烦（占内存）我们的目的是为了计数，而不是保存用户id；<br>  0.81%,可以忽略不计！</p>
+<p>127.0.0.1:6379&gt; pfadd mykey a b c d e f g #创建第一组元素 mykey<br>(integer) 1<br>127.0.0.1:6379&gt; pfcount mykey #统计mykey 元素基数 数量<br>(integer) 7<br>127.0.0.1:6379&gt; pfadd mykey2 i j k l m n o #创建第一组元素 mykey2<br>(integer) 1<br>127.0.0.1:6379&gt; pfcount mykey2<br>(integer) 7<br>127.0.0.1:6379&gt; pfmerge mykey3 mykey mykey2 #合并 两组 mykey mykey2 &#x3D; mykey3<br>OK<br>127.0.0.1:6379&gt; pfcount mykey3 #查看并集数量<br>(integer) 14<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>如果允许容错，那么一定使用Hyperloglog！<br>如果不允许容错，就是用set 或者自己的数据类型就可以了</p>
+<p>8、Bitmap<br>  在开发中都有十分多的应用场景，学习了，就是多一个思路！<br>  技多不压身！<br>  只要学不死，就往死里学！</p>
+<p>位存储<br>  统计用户信息，活跃，不活跃，登录，未登录，打卡，未打卡，两个状态的都可以用Bitmap！<br>  Bitmaps 位图，数据结构！都是操作二进制韦来进行记录，就只有0和1两个状态！</p>
+<p>  使用Bitmaps 来记录周一到周日的打卡！<br>  周一：0<br>  周二：0</p>
+<p>查看某一天是否有打卡</p>
+<p>统计操作，查看打卡的天数<br>只有两天打卡</p>
+<p>9、事务及监控<br>9.1事务<br>要么同时成功，要么同时失败，原子性！</p>
+<p>Redis 单条命令是保证原子性的，但是Redis 事务是不保证原子性的！<br>Redis 事务没有隔离级别的概念！</p>
+<p>所有的命令在事务中，并没有直接被执行！只有发起执行命令的时候才会执行！</p>
+<p>  Redis 事务本质：一组命令的集合！一个事务中的所有命令都会被序列化，在事务执行的过程中，会顺序执行</p>
+<p>一次性<br>顺序性<br>排他性<br>执行一些列的命令！<br>——-队列 set set set 执行————<br>1<br>Redis 的事务</p>
+<p>开启事务（multi）<br>命令入列<br>执行事务（exec）<br>锁：redis 可以实现乐观锁</p>
+<p>正常执行事务</p>
+<p>127.0.0.1:6379&gt; multi #开启事务<br>OK</p>
+<h1 id="命令入队"><a href="#命令入队" class="headerlink" title="命令入队"></a>命令入队</h1><p>127.0.0.1:6379&gt; set k1 v1<br>QUEUED<br>127.0.0.1:6379&gt; set k2 v2<br>QUEUED<br>127.0.0.1:6379&gt; get k2<br>QUEUED<br>127.0.0.1:6379&gt; set k3 v3<br>QUEUED<br>127.0.0.1:6379&gt; exec #执行事务，执行完事务结束了，如果还想执行，需要重新开启事务<br>#执行事务结果</p>
+<ol>
+<li>OK</li>
+<li>OK</li>
+<li>“v2”</li>
+<li>OK<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>放弃事务</li>
+</ol>
+<p>127.0.0.1:6379&gt; multi<br>OK<br>127.0.0.1:6379&gt; set k1 v1<br>QUEUED<br>127.0.0.1:6379&gt; set k2 v2<br>QUEUED<br>127.0.0.1:6379&gt; set k4 v4<br>QUEUED<br>127.0.0.1:6379&gt; discard #放弃事务，一旦放弃，事务队列中命令都不会执行了<br>OK<br>127.0.0.1:6379&gt; get k4<br>(nil)<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>  编译型异常（代码问题！命令有错）事务中所有的命令都不会被执行！</p>
+<p>127.0.0.1:6379&gt; multi<br>OK<br>127.0.0.1:6379&gt; set k1 v1<br>QUEUED<br>127.0.0.1:6379&gt; set k2 v2<br>QUEUED<br>127.0.0.1:6379&gt; set k3 v3<br>QUEUED<br>127.0.0.1:6379&gt; getset k3 #错误命令<br>(error) ERR wrong number of arguments for ‘getset’ command<br>127.0.0.1:6379&gt; set k4 v4<br>QUEUED<br>127.0.0.1:6379&gt; set k5 v5<br>QUEUED<br>127.0.0.1:6379&gt; exec #执行事务报错的<br>(error) EXECABORT Transaction discarded because of previous errors.<br>127.0.0.1:6379&gt; get k5 #所有的命令都不会被执行<br>(nil)<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>  运行时异常（1&#x2F;0）,如果事务队列中存在语法性，那么执行命令的时候，其他命令是可以正常执行，错误命令抛出异常！</p>
+<p>127.0.0.1:6379&gt; set k1 “v1” #存入String 值<br>OK<br>127.0.0.1:6379&gt; multi #开启事务<br>OK<br>127.0.0.1:6379&gt; incr k1 #自增1<br>QUEUED<br>127.0.0.1:6379&gt; set k2 v2<br>QUEUED<br>127.0.0.1:6379&gt; set k3 v3<br>QUEUED<br>127.0.0.1:6379&gt; get k3<br>QUEUED<br>127.0.0.1:6379&gt; exec</p>
+<ol>
+<li>(error) ERR value is not an integer or out of range</li>
+<li>OK #虽然第一条命令报错了，其他命令正常执行</li>
+<li>OK</li>
+<li>“v3”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>9.2监控<br>悲观锁：<br>  很悲观，认为什么时候都会出现问题！</li>
+</ol>
+<p>乐观锁<br>  很乐观，认为什么时候都不会出现问题，所以不会上锁！更新数据的时候去判断一下，在此期间期间是否有人修改过这个数据，version ！（判断version）</p>
+<p>Redis 乐观锁</p>
+<p>获取version（不加锁）<br>更新的时候比较 version，<br>程序里边并发的时候一般都使用乐观锁，而不会使用悲观锁，因为无论做什么都会加锁，悲观锁这个效率极其低下， 乐观锁相对来说性能相对会好很多。<br>Redis 监视测试</p>
+<p>127.0.0.1:6379&gt; set money 100<br>OK<br>127.0.0.1:6379&gt; set out 0<br>OK<br>127.0.0.1:6379&gt; watch money #监视money 对象<br>OK<br>#事务正常结束，数据期间没有发生变动，这个时候正常执行成功<br>127.0.0.1:6379&gt; multi<br>OK<br>127.0.0.1:6379&gt; decrby money 20<br>QUEUED<br>127.0.0.1:6379&gt; incrby out 20<br>QUEUED<br>127.0.0.1:6379&gt; exec</p>
+<ol>
+<li>(integer) 80</li>
+<li>(integer) 20<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>测试多线程修修改值，监视，使用watch可以当做redis的乐观锁操作</li>
+</ol>
+<p>线程1</p>
+<p>127.0.0.1:6379&gt; watch money #监视<br>OK<br>127.0.0.1:6379&gt; multi<br>OK<br>127.0.0.1:6379&gt; decrby money 10<br>QUEUED<br>127.0.0.1:6379&gt; incrby out 10<br>QUEUED<br>#执行之前另外一个线程修改了值，这个时候会导致事务执行失败<br>127.0.0.1:6379&gt; exec<br>(nil)<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>线程2</p>
+<p>127.0.0.1:6379&gt; get money<br>(nil)<br>127.0.0.1:6379&gt; get money<br>(nil)<br>127.0.0.1:6379&gt; set money 1000<br>OK<br>1<br>2<br>3<br>4<br>5<br>6<br>如果修改失败，获取最新的值就好！</p>
+<p>10、Jedis<br>什么是jedis？<br>  是Redis 官方推荐的java 连接开发工具！使用java操作Redis 中间件！如果要使用java 操作redis ，那么一定要对jedis 十分的熟悉！</p>
+<p>1.导入依赖</p>
+<p>redis.clients jedis 3.6.0</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--fastjson--&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>fastjson<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.2.62<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br>TEXT<br></code></pre></td></tr></table></figure>
+
+<p>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 2.编码测试 连接数据库</p>
+<p>public class TestPing {<br>public static void main(String[] args) {<br>&#x2F;&#x2F;1、new Jedis 对象即可<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”,6379);<br>System.out.println(jedis.ping());<br>}<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>输出</p>
+<p>PONG<br>1<br>10.1通过Jedis操作Redis<br>ping() 测试连接<br>exists(“name”) 判断key 是否存在<br>set(“password”,”xy”) 根据key 设置值<br>keys(“*”) 查看所有key<br>jedis.del(“password”) 删除key<br>type(“username”) 查看key的存储数据类型<br>rename(“username”,”name”) 修改key 名称<br>select(0) 按索引查看<br>flushDB() 清空当前数据库<br>dbSize() 返回数据库中的key数量<br>flushAll() 清空所有数据库key<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”, 6379);<br>System.out.println(jedis.ping());</p>
+<p>System.out.println(“清空数据库”+jedis.flushDB());<br>System.out.println(“判断某个key是否存在：”+ jedis.exists(“name”));<br>System.out.println(“新增username，xy键值对：”+jedis.set(“password”,”xy”));<br>System.out.println(“新增password，123键值对：”+jedis.set(“password”,”xy”));<br>System.out.println(“系统中所有的key 如下：”);<br>Set keys &#x3D; jedis.keys(“*”);<br>System.out.println(keys);<br>System.out.println(“删除key password：”+jedis.del(“password”));<br>System.out.println(“判断key password是否存在：”+jedis.exists(“password”));<br>System.out.println(“查看key username所存储的类型：”+jedis.type(“username”));<br>System.out.println(“重命名key “+jedis.rename(“username”,”name”));<br>System.out.println(“取出修改后的name：”+jedis.get(“name”));<br>System.out.println(“按索引查询：”+jedis.select(0));<br>System.out.println(“删除当前数据库中的所有key ：”+jedis.flushDB());<br>System.out.println(“返回数据库中所有的key 数目：”+jedis.dbSize());<br>System.out.println(“删除所有数据库中的key：”+jedis.flushAll());<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>输出结果</p>
+<p>PONG<br>清空数据库OK<br>判断某个key是否存在：false<br>新增username，xy键值对：OK<br>新增password，123键值对：OK<br>系统中所有的key 如下：<br>[password, username]<br>删除key password：1<br>判断key password是否存在：false<br>查看key username所存储的类型：string<br>重命名key OK<br>取出修改后的name：xy<br>按索引查询：OK<br>删除当前数据库中的所有key ：OK<br>返回数据库中所有的key 数目：0<br>删除所有数据库中的key：OK<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>10.2Jedis 操作String类型<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”, 6379);<br>&#x2F;&#x2F;清空当前数据库<br>jedis.flushDB();<br>jedis.set(“key1”,”val1”);<br>jedis.set(“key2”,”val2”);<br>jedis.set(“key3”,”val3”);<br>System.out.println(“删除key2：”+jedis.del(“key2”));<br>System.out.println(“获取key2：”+jedis.get(“key2”));<br>System.out.println(“修改key1：”+jedis.set(“key1”,”value1Changed”));<br>System.out.println(“在key3后面加入数据：”+jedis.append(“key3”,”Emd”));<br>System.out.println(“key3的值：”+jedis.get(“key3”));<br>System.out.println(“增加多个键值对：”+jedis.mset(“key01”,”value01”,”key02”,”value02”,”key03”,”value03”,”key04”,”value04”));<br>System.out.println(“获取多个键值对：”+jedis.mget(“key01”,”key02”,”key03”));<br>System.out.println(“获取多个键值对：”+jedis.mget(“key01”,”key02”,”key03”,”key04”));<br>System.out.println(“删除多个键值对：”+jedis.del(“key01”,”key02”));<br>System.out.println(“获取多个键值对：”+jedis.mget(“key01”,”key02”));</p>
+<p>jedis.flushDB();<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;新增键值对并设置有效时间&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(jedis.setnx(“key1”,”value1”));<br>System.out.println(jedis.setnx(“key2”,”value2”));<br>System.out.println(jedis.setnx(“key2”,”value2-new”));<br>System.out.println(jedis.get(“key1”));<br>System.out.println(jedis.get(“key2”));</p>
+<p>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;设置有效时间&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(jedis.setex(“key3”,2,”value3”));<br>System.out.println(jedis.get(“key3”));</p>
+<p>try{<br>TimeUnit.SECONDS.sleep(3);<br>}catch (Exception e){<br>e.printStackTrace();<br>}<br>System.out.println(jedis.get(“key3”));<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;获取原值，更新为新值&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(jedis.getSet(“key2”,”keyGetSet”));<br>System.out.println(jedis.get(“key2”));</p>
+<p>System.out.println(“获得key2的值的字符串：”+jedis.getrange(“key2”,2,4));<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>结果：</p>
+<p>删除key2：1<br>获取key2：null<br>修改key1：OK<br>在key3后面加入数据：7<br>key3的值：val3Emd<br>增加多个键值对：OK<br>获取多个键值对：[value01, value02, value03]<br>获取多个键值对：[value01, value02, value03, value04]<br>删除多个键值对：2<br>获取多个键值对：[null, null]<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;新增键值对并设置有效时间&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>1<br>1<br>0<br>value1<br>value2<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;设置有效时间&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>OK<br>value3<br>null<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;获取原值，更新为新值&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>value2<br>keyGetSet<br>获得key2的值的字符串：yGe<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>10.3.Jedis操作List类型<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”, 6379);</p>
+<p>jedis.flushDB();<br>System.out.println(“添加一个List”);<br>jedis.lpush(“collections”,”ArrayList”,”LinkedList”,”Vector”,”Stack”,”Map”,”HashMap”);<br>jedis.lpush(“collections”,”Set”);<br>jedis.lpush(“collections”,”HashSet”);<br>jedis.lpush(“collections”,”TreeMap”);<br>System.out.println(“Collection集合内容：”+jedis.lrange(“collections”,0,-1));&#x2F;&#x2F;-1表示最后一个元素<br>System.out.println(“Collection区间0-3的元素”+jedis.lrange(“collections”,0,3));<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>&#x2F;&#x2F;删除列表指定的值，第二个参数为删除的个数（有重复时），后面add进行的值先被删除，类似出栈<br>System.out.println(“删除指定元素个数：”+jedis.lrem(“collections”,2,”HashMap”));<br>System.out.println(“collections内容：”+jedis.lrange(“collections”,0,-1));<br>System.out.println(“删除下标0-3区间之外的元素：”+jedis.ltrim(“collections”,0,3));<br>System.out.println(“collections内容：”+jedis.lrange(“collections”,0,-1));<br>System.out.println(“collections列表出栈（左端）：”+jedis.lpop(“collections”));<br>System.out.println(“collections内容：”+jedis.lrange(“collections”,0,-1));<br>System.out.println(“collections添加元素，从列表右端，与lpush对应”+jedis.rpush(“collections”,”Java”));<br>System.out.println(“collections内容：”+jedis.lrange(“collections”,0,-1));<br>System.out.println(“修改collections指定下标1的内容：”+jedis.lset(“collections”,1,”newValue”));<br>System.out.println(“collections内容：”+jedis.lrange(“collections”,0,-1));<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(“collections长度”+jedis.llen(“collections”));<br>System.out.println(“获取collections下标为2的长度”+jedis.lindex(“collections”,2));<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(jedis.lpush(“sortedList”,”3”,”6”,”2”,”0”,”7”,”4”));<br>System.out.println(“sortedList排序前：”+jedis.lrange(“sortedList”,0,-1));<br>&#x2F;&#x2F;排序<br>List sortedList &#x3D; jedis.sort(“sortedList”);<br>System.out.println(“sortedList排序后：”+sortedList);<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>结果</p>
+<p>添加一个List<br>Collection集合内容：[TreeMap, HashSet, Set, HashMap, Map, Stack, Vector, LinkedList, ArrayList]<br>Collection区间0-3的元素[TreeMap, HashSet, Set, HashMap]<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>删除指定元素个数：1<br>collections内容：[TreeMap, HashSet, Set, Map, Stack, Vector, LinkedList, ArrayList]<br>删除下标0-3区间之外的元素：OK<br>collections内容：[TreeMap, HashSet, Set, Map]<br>collections列表出栈（左端）：TreeMap<br>collections内容：[HashSet, Set, Map]<br>collections添加元素，从列表右端，与lpush对应4<br>collections内容：[HashSet, Set, Map, Java]<br>修改collections指定下标1的内容：OK<br>collections内容：[HashSet, newValue, Map, Java]<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>collections长度4<br>获取collections下标为2的长度Map<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>6<br>sortedList排序前：[4, 7, 0, 2, 6, 3]<br>sortedList排序后：[0, 2, 3, 4, 6, 7]<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>10.4.Jedis操作Set类型<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”, 6379);<br>jedis.flushDB();<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;往集合里添加元素（不重复）&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(jedis.sadd(“eleSet”,”e1”,”e2”,”e3”,”e4”,”e6”,”e5”,”e0”,”e8”,”e7”));<br>System.out.println(jedis.sadd(“eleSet”,”e6”));<br>System.out.println(jedis.sadd(“eleSet”,”e6”));<br>System.out.println(“eleSet的所有元素为：”+jedis.smembers(“eleSet”));<br>System.out.println(“删除一个元素e0:”+jedis.srem(“eleSet”,”e0”));<br>System.out.println(“eleSet的所有元素为：”+jedis.smembers(“eleSet”));<br>System.out.println(“删除两个元素e7，e6：”+jedis.srem(“eleSet”,”e7”,”e6”));<br>System.out.println(“eleSet的所有元素为：”+jedis.smembers(“eleSet”));<br>System.out.println(“随机移除集合中的一个元素：”+jedis.spop(“eleSet”));<br>System.out.println(“随机移除集合中的一个元素：”+jedis.spop(“eleSet”));<br>System.out.println(“eleSet的所有元素为：”+jedis.smembers(“eleSet”));<br>System.out.println(“eleSet的所有元素的个数为：”+jedis.scard(“eleSet”));<br>System.out.println(“e3是否在eleSet中：”+jedis.sismember(“eleSet”,”e3”));<br>System.out.println(“e1是否在eleSet中：”+jedis.sismember(“eleSet”,”e1”));<br>System.out.println(“e5是否在eleSet中：”+jedis.sismember(“eleSet”,”e5”));<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(jedis.sadd(“eleSet1”,”e1”,”e2”,”e3”,”e4”,”e5”,”e8”,”e7”));<br>System.out.println(jedis.sadd(“eleSet2”,”e1”,”e2”,”e3”,”e4”,”e8”));<br>System.out.println(“将eleSet1中删除e1并存入eleSet3中：”+jedis.smove(“eleSet1”,”eleSet3”,”e1”));<br>System.out.println(“将eleSet2中删除e1并存入eleSet3中：”+jedis.smove(“eleSet1”,”eleSet3”,”e2”));<br>System.out.println(“eleSet1中的元素：”+jedis.smembers(“eleSet1”));<br>System.out.println(“eleSet3中的元素：”+jedis.smembers(“eleSet3”));<br>System.out.println(“&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;集合运算&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;”);<br>System.out.println(“eleSet1中的元素：”+jedis.smembers(“eleSet1”));<br>System.out.println(“eleSet2中的元素：”+jedis.smembers(“eleSet2”));<br>System.out.println(“eleSet1和eleSet2的并集：”+jedis.sinter(“eleSet1”,”eleSet2”));<br>System.out.println(“eleSet1和eleSet2的并集：”+jedis.sunion(“eleSet1”,”eleSet2”));<br>System.out.println(“eleSet1和eleSet2的差集：”+jedis.sdiff(“eleSet1”,”eleSet2”));<br>&#x2F;&#x2F;求并集并将交集保存到dstkey集合<br>jedis.sinterstore(“eleSet4”,”eleSet1”,”eleSet2”);<br>System.out.println(“eleSet4的元素：”+jedis.smembers(“eleSet4”));<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>结果</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;往集合里添加元素（不重复）&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>9<br>0<br>0<br>eleSet的所有元素为：[e1, e2, e4, e6, e0, e5, e7, e3, e8]<br>删除一个元素e0:1<br>eleSet的所有元素为：[e6, e5, e4, e1, e7, e3, e8, e2]<br>删除两个元素e7，e6：2<br>eleSet的所有元素为：[e4, e1, e5, e3, e8, e2]<br>随机移除集合中的一个元素：e3<br>随机移除集合中的一个元素：e4<br>eleSet的所有元素为：[e1, e5, e8, e2]<br>eleSet的所有元素的个数为：4<br>e3是否在eleSet中：false<br>e1是否在eleSet中：true<br>e5是否在eleSet中：true<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>7<br>5<br>将eleSet1中删除e1并存入eleSet3中：1<br>将eleSet2中删除e1并存入eleSet3中：1<br>eleSet1中的元素：[e3, e8, e4, e7, e5]<br>eleSet3中的元素：[e2, e1]<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;集合运算&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>eleSet1中的元素：[e3, e8, e4, e7, e5]<br>eleSet2中的元素：[e4, e3, e2, e1, e8]<br>eleSet1和eleSet2的并集：[e4, e3, e8]<br>eleSet1和eleSet2的并集：[e3, e8, e1, e2, e4, e7, e5]<br>eleSet1和eleSet2的差集：[e5, e7]<br>eleSet4的元素：[e4, e3, e8]<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>10.5.Jedis操作Hash<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”, 6379);</p>
+<p>jedis.flushDB();<br>Map&lt;String,String&gt; hash &#x3D; new HashMap&lt;String, String&gt;();<br>hash.put(“k1”,”v1”);<br>hash.put(“k2”,”v2”);<br>hash.put(“k3”,”v3”);<br>hash.put(“k4”,”v4”);<br>&#x2F;&#x2F;添加名称为hash（key）的元素<br>jedis.hmset(“hash”,hash);<br>&#x2F;&#x2F;向名称为hash的hash中添加key k5 value 为v5<br>jedis.hset(“hash”,”k5”,”v5”);<br>System.out.println(“散列hash的所有键值对为：”+jedis.hgetAll(“hash”));<br>System.out.println(“散列hash的所有键：”+jedis.hkeys(“hash”));<br>System.out.println(“散列hash的所有值：”+jedis.hvals(“hash”));<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>结果</p>
+<p>散列hash的所有键值对为：{k3&#x3D;v3, k4&#x3D;v4, k5&#x3D;v5, k1&#x3D;v1, k2&#x3D;v2}<br>散列hash的所有键：[k3, k4, k5, k1, k2]<br>散列hash的所有值：[v3, v2, v1, v4, v5]<br>1<br>2<br>3<br>10.6Jedis操作事务<br>public static void main(String[] args) {<br>Jedis jedis &#x3D; new Jedis(“127.0.0.1”, 6379);<br>jedis.flushDB();<br>&#x2F;&#x2F;开启事务<br>Transaction transaction &#x3D; jedis.multi();<br>JSONObject jsonObject &#x3D; new JSONObject();<br>jsonObject.put(“hello”, “world”);<br>jsonObject.put(“name”, “xy”);<br>String result &#x3D; jsonObject.toJSONString();</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">try &#123;<br>    <span class="hljs-keyword">transaction</span>.<span class="hljs-keyword">set</span>(&quot;user1&quot;, result);<br>    <span class="hljs-keyword">transaction</span>.<span class="hljs-keyword">set</span>(&quot;user2&quot;, result);<br><br>    //模拟异常<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">1</span> /<span class="hljs-number">0</span>;<br><br>    <span class="hljs-keyword">transaction</span>.exec();<br>&#125; catch (<span class="hljs-keyword">Exception</span> e) &#123;<br>    //放弃事务<br>    <span class="hljs-keyword">transaction</span>.<span class="hljs-keyword">discard</span>();<br>    e.printStackTrace();<br>&#125;finally&#123;<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(jedis.<span class="hljs-keyword">get</span>(&quot;user1&quot;));<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(jedis.<span class="hljs-keyword">get</span>(&quot;user2&quot;));<br>    jedis.<span class="hljs-keyword">close</span>();//关闭连接<br>&#125;<br><br><span class="hljs-type">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>结果：</p>
+<p>java.lang.ArithmeticException: &#x2F; by zero<br>at cn.bloghut.TestTx.main(TestTx.java:30)<br>null<br>null<br>1<br>2<br>3<br>4<br>11、SpringBoot集成Redis<br>11.1SpringBoot集成Redis源码<br>SpringBoot 操作数据库：spring-data jpa jdbc mongodb redis</p>
+<p>Spring Data也是和SpringBoot 齐名的项目</p>
+<p>在SpringBoot 2.x之后，原来使用的jedis 被替换成了 lettuce</p>
+<p>jedis：<br>  底层采用的是直连，多个线程操作的话是不安全的，如果想要避免不安全，使用jedis pool连接池！ NIO模式</p>
+<p>lettuce：<br>  底层采用netty，实例可以在多个线程中进行共享，不存在不安全的情况！可以减少线程数量，更新 NIO 模式</p>
+<p>spring.factories</p>
+<p>RedisTemplate 模板</p>
+<p>@ConditionalOnMissingBean，它是修饰bean的一个注解，主要实现的是，当你的bean被注册之后，如果而注册相同类型的bean，就不会成功，它会保证你的bean只有一个，即你的实例只有一个，当你注册多个相同的bean时，会出现异常，以此来告诉开发人员。<br>简单点：就是不存在这个bean 这个方法才生效！<br>我们如果自己定义了一个redisTemplate 它这个默认的就会失效</p>
+<p>@Bean<br>@ConditionalOnMissingBean<br>@ConditionalOnSingleCandidate(RedisConnectionFactory.class)<br>public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {<br>1<br>2<br>3<br>4<br>由于 String 是redis中最常用的类型，所以单独提出来一个bean</p>
+<p>11.2SpringBoot整合Redis<br>1.导入依赖</p>
+<p>org.springframework.boot spring-boot-starter-data-redis </p>
+<p>1 2 3 4 2.配置连接</p>
+<p>#SpringBoot 所有的配置类都有一个自动配置类<br>#自动配置类 都会绑定一个properties 配置文件</p>
+<p>spring:<br>redis:<br>host: 127.0.0.1<br>port: 6379<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>3.测试</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs awk">@Autowired<br>private RedisTemplate redisTemplate;<br><br>@Test<br>void contextLoads() &#123;<br>    <span class="hljs-regexp">//</span>操作不同的数据类型<br>    <span class="hljs-regexp">//</span>操作五大数据类型<br>    <span class="hljs-regexp">//</span>opsForValue()    操作String<br>    <span class="hljs-regexp">//</span>opsForList()     操作List<br>    <span class="hljs-regexp">//</span>opsForSet()      操作Set<br>    <span class="hljs-regexp">//</span>opsForHash()     操作Hash<br>    <span class="hljs-regexp">//</span>opsForZSet()     操作Zset<br><br>    <span class="hljs-regexp">//</span>除了基本操作，常用方法都可以直接使用<br>    <span class="hljs-regexp">//</span>事务 和基本的CRUD<br><br>    <span class="hljs-regexp">//</span>获取redis 连接对象<br><br>TEXT<br></code></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F; RedisConnection connection &#x3D; redisTemplate.getConnectionFactory().getConnection();<br>&#x2F;&#x2F; connection.flushDb();<br>&#x2F;&#x2F; connection.flushAll();</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">    redisTemplate.opsForValue().<span class="hljs-keyword">set</span>(&quot;mykey&quot;,&quot;csdn_xy&quot;);<br>    <span class="hljs-keyword">Object</span> mykey = redisTemplate.opsForValue().<span class="hljs-keyword">get</span>(&quot;mykey&quot;);<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(mykey);<br><br><br>&#125;<br><br><span class="hljs-type">TEXT</span><br></code></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>  所有的redis操作，其实对于java开发人员来说，十分的简单，更重要是要去理解redis的思想和每一种 据结构的用处和作用场景！</p>
+<p>11.3自定义RedisTemplate<br>1.RedisTemplate使用的是 JdkSerializationRedisSerializer<br>2.RedisTemplate 封装了对Redis的一些常用的操作<br>3.Jedis是Redis官方推荐的面向Java的操作Redis的客户端，而RedisTemplate是SpringDataRedis中对JedisApi的高度封装。</p>
+<p>@Configuration<br>public class RedisConfig {</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 自己定义了一个 RedisTemplate</span><br><span class="hljs-comment"> * @param factory</span><br><span class="hljs-comment"> * @return</span><br><span class="hljs-comment"> */</span><br>@Bean<br>@<span class="hljs-built_in">SuppressWarnings</span>(<span class="hljs-string">&quot;all&quot;</span>)<br><span class="hljs-function"><span class="hljs-keyword">public</span> RedisTemplate&lt;<span class="hljs-type">String</span>, Object&gt; <span class="hljs-title">redisTemplate</span><span class="hljs-params">(RedisConnectionFactory</span></span><br><span class="hljs-params"><span class="hljs-function">                                                           factory)</span> </span>&#123;<br>    <span class="hljs-comment">// 我们为了自己开发方便，一般直接使用 &lt;String, Object&gt;</span><br>    RedisTemplate&lt;<span class="hljs-type">String</span>, Object&gt; <span class="hljs-keyword">template</span> = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RedisTemplate</span>&lt;<span class="hljs-type">String</span>,<br>            Object&gt;();<br>    <span class="hljs-keyword">template</span>.<span class="hljs-built_in">setConnectionFactory</span>(factory);<br>    <span class="hljs-comment">// Json序列化配置</span><br>    Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = <span class="hljs-keyword">new</span><br>            <span class="hljs-built_in">Jackson2JsonRedisSerializer</span>(Object.<span class="hljs-keyword">class</span>);<br>    ObjectMapper om = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ObjectMapper</span>();<br>    om.<span class="hljs-built_in">setVisibility</span>(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);<br>    om.<span class="hljs-built_in">enableDefaultTyping</span>(ObjectMapper.DefaultTyping.NON_FINAL);<br>    jackson2JsonRedisSerializer.<span class="hljs-built_in">setObjectMapper</span>(om);<br>    <span class="hljs-comment">// String 的序列化</span><br>    StringRedisSerializer stringRedisSerializer = <span class="hljs-keyword">new</span><br>            <span class="hljs-built_in">StringRedisSerializer</span>();<br>    <span class="hljs-comment">// key采用String的序列化方式</span><br>    <span class="hljs-keyword">template</span>.<span class="hljs-built_in">setKeySerializer</span>(stringRedisSerializer);<br>    <span class="hljs-comment">// hash的key也采用String的序列化方式</span><br>    <span class="hljs-keyword">template</span>.<span class="hljs-built_in">setHashKeySerializer</span>(stringRedisSerializer);<br>    <span class="hljs-comment">// value序列化方式采用jackson</span><br>    <span class="hljs-keyword">template</span>.<span class="hljs-built_in">setValueSerializer</span>(jackson2JsonRedisSerializer);<br>    <span class="hljs-comment">// hash的value序列化方式采用jackson</span><br>    <span class="hljs-keyword">template</span>.<span class="hljs-built_in">setHashValueSerializer</span>(jackson2JsonRedisSerializer);<br>    <span class="hljs-keyword">template</span>.<span class="hljs-built_in">afterPropertiesSet</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">template</span>;<br>&#125;<br><br>TEXT<br></code></pre></td></tr></table></figure>
+
+<p>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>12、Redis.conf配置文件详解<br>  1.启动的时候通过配置文件来启动！<br>  2.行家有没有，出手就知道<br>  3.行家一出手，就知有没有<br>  4.内行看门道，外行看热闹<br>  5.工作中一些小小的配置，可以让你脱颖而出</p>
+<p>unit单位 对大小写不敏感</p>
+<p>包含<br>比如Spring 里面 的import</p>
+<p>网络</p>
+<p>绑定的ip bind 127.0.0.1 -::1<br>保护模式 protected-mode yes<br>端口号 port 6379<br>1<br>2<br>3<br>通用配置<br>是否以守护线程开启，默认是no yes 以守护进程的方式运行</p>
+<p>如何以后台的方式运行，我们需要指定一个pid 文件（进程文件）</p>
+<p>日志</p>
+<p>数据库的数量，默认是16个</p>
+<p>是否显示logo</p>
+<p>快照<br>持久化，在规定的时间内，执行了多少次操作，则会持久化到 .rdb 。aof</p>
+<p>redis 是个内存数据库，如果不持久化的话，数据就会丢</p>
+<p>内存是 断电即失去</p>
+<p>save 900 1</p>
+<p>如果900 秒内，如果至少有1个key 进行了修改，我们其进行持久化操作</p>
+<p>save 30 10</p>
+<p>如果300 秒内，如果至少有10个key 进行了修改，我们其进行持久化操作</p>
+<p>save 60 10000</p>
+<p>如果60 秒内，如果至少有10000个key 进行了修改，我们其进行持久化操作</p>
+<p>持久化失败了，是否继续执行工作</p>
+<p>是否压缩rdb 文件（rdb 持久化的文件）,需要耗费一些CPU的资源！</p>
+<p>保存rdb文件的时候，进行rdb检查校验</p>
+<p>rdb文件保存的目录</p>
+<p>主从复制相关的</p>
+<p>是不是保存一些数据</p>
+<p>是不是只读的</p>
+<p>安全相关</p>
+<p>可以设置密码，默认是没有密码的</p>
+<p>没有权限，需要登录</p>
+<p>设置密码</p>
+<p>客户端限制<br>maxclients 1000 设置能连接上redis 的最大客户端数量</p>
+<p>内存到达上限的处理策略<br>移除一些过期的key<br>报错<br>  1、volatile-lru：只对设置了过期时间的key进行LRU（默认值）<br>  2、allkeys-lru ： 删除lru算法的key<br>  3、volatile-random：随机删除即将过期key<br>  4、allkeys-random：随机删除<br>  5、volatile-ttl ： 删除即将过期的<br>  6、noeviction ： 永不过期，返回错误</p>
+<p>AOF配置</p>
+<p>  默认是不开启aof模式的，模式是使用rdb 方式持久化的，在大部分所有的情况下，rdb完全够用了！<br>appendonly.aof 持久化文件的名称</p>
+<p>  1.appendfsync everysec 每秒执行一次 sync ，可能会丢失这一秒的数据<br>  2.appendfsync always 每次修改都会 sync，速度比较慢<br>  3.appendfsync no 不执行 sync，这个时候操作系统自己同步数据，速度最快！</p>
+<p>性能建议还是 首选rdb</p>
+<p>13、Redis持久化<br>Redis持久化–ADB<br>面试和工作，持久化都是重点。</p>
+<p>  Redis 是内存数据库，如果不将内存中的数据库状态保存到磁盘，那么一旦服务器进程退出（断电），服务器中的数据库状态也会消失。所以Redis 提供了持久化功能。</p>
+<p>在主从复制中，rdb 是用于备用的</p>
+<p>  在指定的时间间隔内将内存中的数据集快照写入磁盘，行话将的：Snapshot 快照，它恢复是将快照文件直接读到内存里。</p>
+<p>  Redus会单独创建（Fork） 一个子进程来进程持久化，会先将数据写入到一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO 操作的。这就确保了极高的性能。如果需要进行大规模数据的恢复，且对于数据恢复的完整性不是非常敏感，那RDB方式要比AOF 方式更加的高效，RDB 缺点是最后一次持久化后的数据库可能丢失。我们默认的就是RDB，一般情况下不需要修改这个配置。</p>
+<p>  RDB保存的文件是dump.rbb</p>
+<p>  都是在我们的配置文件中快照中进行配置的</p>
+<p>一分钟类 添加5个key</p>
+<p>生成了dump.rdb</p>
+<p>关机</p>
+<p>查看进程<br>已经关闭了</p>
+<p>启动redis</p>
+<p>查看进程</p>
+<p>连接<br>获取k1<br>可以获取到其值 v1 一直存在</p>
+<p>使用flushall 命令，清空所有数据库，会自动生成一个rdb文件</p>
+<p>触发机制</p>
+<p>save 的规则满足的情况下，会自动触发rdb规则<br>执行flushall 命令，也会触发rdb规则<br>退出redis ，也会产生rdb文件！<br>备份就会自动生成一个dump.rdb 文件</p>
+<p>如何恢复rdb文件</p>
+<p>只需要将rdb文件放在我们redis启动就可以了，Redis 启动的时候会自动检查dump.rdb文件 恢复其中的数据。<br>查看需要存放的文字<br>如果在 这个 &#x2F;home&#x2F;wrz&#x2F;redis-6.2.3&#x2F;src 目录下存放 dump.rdb文件，启动就会自动恢复其中的数据。</p>
+<p>几乎他自己默认的配置就够用了！</p>
+<p>优点</p>
+<p>适合大规模的数据恢复！<br>对数据的完整性要求不高！<br>缺点</p>
+<p>需要一定的时间间隔进程操作！如果意外宕机了，这个最后一次修改数据就没有的了！<br>fork进程的时候，会占用一定的内存空间！<br>Redis持久化–AOF<br>  将我们的所有命令都记录下来，history，恢复的时候把这个文件全部再执行一遍</p>
+<p>  以日志的形式来记录每个写操作，将Redis执行过的所有指令记录下来（读操作不记录），只许追加文件但不可以改写文件，Redis 启动之初会读取该文件重新构建数据，换言之，redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作</p>
+<p>  AOF保存的是appendonly.aof 文件</p>
+<p>默认是不开启的，需要手动设置，将appendonly 设置为yes</p>
+<p>重写的规则</p>
+<p>修改配置文件</p>
+<p>重启redis</p>
+<p>查看aof文件</p>
+<p>添加数据</p>
+<p>查看appendonly 文件</p>
+<p>  如果这个aof 文件有错位，这个时候redis是启动不起来的，需要修复这个aof 文件<br>redis 提供了一个工具</p>
+<p>redis-check-aof –fix<br>1<br>一种是全丢，只丢错误的数据。</p>
+<p>appendfsync everysec 每秒执行一次 sync ，可能会丢失这一秒的数据<br>appendfsync always 每次修改都会 sync，速度比较慢<br>appendfsync no 不执行 sync，这个时候操作系统自己同步数据，速度最快！<br>优点</p>
+<p>每一次修改都同步，文件完整性更加好！<br>每秒同步一次，可能会丢失一秒的数据<br>从不同步，效率最高！<br>缺点</p>
+<p>数据文件来说，aof 远远大于rdb，修改的速度也比rdb慢！<br>aof 运行效率也要比rdb慢，所有redis 默认配置是rdb 持久化。<br>重写规则说明</p>
+<p>默认就是文件的无限追加，文件越来越大<br>如果aof 文件大于64m ，太大了！fork 一个新的进来帮我们的文件进行重写！</p>
+<p>Redis持久化总结<br>RDB 持久化方式能够在指定的时间间隔内对你的数据进行快照存储<br>AOF 持久化方式记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始 的数据，AOF命令以Redis 协议追加保存每次写的操作到文件末尾，Redis还能对AOF文件进行后台重 写，使得AOF文件的体积不至于过大。<br>只做缓存，如果你只希望你的数据在服务器运行的时候存在，你也可以不使用任何持久化<br>同时开启两种持久化方式<br>  在这种情况下，当redis重启的时候会优先载入AOF文件来恢复原始的数据，因为在通常情况下AOF 文件保存的数据集要比RDB文件保存的数据集要完整。<br>  RDB 的数据不实时，同时使用两者时服务器重启也只会找AOF文件，那要不要只使用AOF呢？作者 建议不要，因为RDB更适合用于备份数据库（AOF在不断变化不好备份），快速重启，而且不会有 AOF可能潜在的Bug，留着作为一个万一的手段。<br>性能建议<br>  因为RDB文件只用作后备用途，建议只在Slave上持久化RDB文件，而且只要15分钟备份一次就够 了，只保留 save 900 1 这条规则。<br>   如果Enable AOF ，好处是在最恶劣情况下也只会丢失不超过两秒数据，启动脚本较简单只load自 己的AOF文件就可以了，代价一是带来了持续的IO，二是AOF rewrite 的最后将 rewrite 过程中产 生的新数据写到新文件造成的阻塞几乎是不可避免的。只要硬盘许可，应该尽量减少AOF rewrite 的频率，AOF重写的基础大小默认值64M太小了，可以设到5G以上，默认超过原大小100%大小重 写可以改到适当的数值。<br>  如果不Enable AOF ，仅靠 Master-Slave Repllcation 实现高可用性也可以，能省掉一大笔IO，也 减少了rewrite时带来的系统波动。代价是如果Master&#x2F;Slave 同时倒掉，会丢失十几分钟的数据， 启动脚本也要比较两个 Master&#x2F;Slave 中的 RDB文件，载入较新的那个，微博就是这种架构。<br>14、Redis发布订阅<br>线程通信<br>  对列 存在两个东西，发送者 订阅者</p>
+<p>Redis 发布订阅（pub&#x2F;sub） 是一种消息通信模式<br>  1.发送者（pub） 发送信息<br>  2.订阅者（sub）接收信息。<br>  3.微信、微博、关注系统<br>  4.消息队列MQ</p>
+<p>Redis 客户端可以订阅任意数量的频道<br>  第一个：消息发送者<br>  第二个：频道<br>  第三个：消息订阅者！</p>
+<p>频道channel1，以及订阅这个频道的三个客户端–client2，client5，client1之间的关系</p>
+<p>当有新消息通过publish 命令发送给频道channel1 时，这个消息就会被发送给订阅它的三个客户端：</p>
+<p>命令</p>
+<p>菜鸟教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/redis/redis-pub-sub.html">https://www.runoob.com/redis/redis-pub-sub.html</a><br>1<br>测试</p>
+<p>订阅端</p>
+<p>127.0.0.1:6379&gt; subscribe xy #订阅一个频道 xy<br>Reading messages… (press Ctrl-C to quit)</p>
+<ol>
+<li>“subscribe”</li>
+<li>“xy”</li>
+<li>(integer) 1</li>
+<li>“message” # 消息</li>
+<li>“xy” # 哪个频道的消息</li>
+<li>“123” # 消息的内容</li>
+<li>“message”</li>
+<li>“xy”</li>
+<li>“xy”</li>
+<li>“message”</li>
+<li>“xy”</li>
+<li>“helloredis”<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>发送端</li>
+</ol>
+<p>127.0.0.1:6379&gt; publish xy 123 # 发布者发布消息到频道<br>(integer) 1<br>127.0.0.1:6379&gt; publish xy xy # 发布者发布消息到频道<br>(integer) 1<br>127.0.0.1:6379&gt; publish xy helloredis # 发布者发布消息到频道<br>(integer) 1<br>127.0.0.1:6379&gt;<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>  Redis是使用C实现的，通过分析 Redis 源码里的 pubsub.c 文件，了解发布和订阅机制的底层实现，籍 此加深对 Redis 的理解。<br>Redis 通过 PUBLISH 、SUBSCRIBE 和 PSUBSCRIBE 等命令实现发布和订阅功能。<br>微信：<br>  通过 SUBSCRIBE 命令订阅某频道后，redis-server 里维护了一个字典，字典的键就是一个个 频道！， 而字典的值则是一个链表，链表中保存了所有订阅这个 channel 的客户端。SUBSCRIBE 命令的关键， 就是将客户端添加到给定 channel 的订阅链表中。</p>
+<p>使用场景<br>  实时消息系统！<br>  事实聊天！（频道当做聊天室，将信息回显给所有人）<br>  订阅、关注系统</p>
+<p>稍微复杂的场景<br>  消息中间间 MQ</p>
+<p>15、Redis集群<br>15.1Redis集群–主从复制<br>比如：1主人–2仆从<br>概念<br>  主从复制，是指将一台Redis 服务器的数据，复制到其他的Redis 服务器。前者称为主节点（Master&#x2F;leader），后者称为从节点（slave&#x2F;follwer）；数据的复制是单向的，只能由主节点到从节点。Master 以写为主，Slave 以读为主。</p>
+<p>  默认情况下，每台Redis 服务器都是主节点；且一个主节点可以有多个从节点（或者没有从节点），但一个从节点只能由一个主节点。</p>
+<p>主从复制的作用主要包括：</p>
+<p>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。<br>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务的冗余。<br>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务 （即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写 少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。<br>高可用（集群）基石：除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复 制是Redis高可用的基础。<br>一般来说，要将Redis运用于工程项目中，只使用一台Redis是万万不能的（宕机，1主2从），原因如下：</p>
+<p>  从结构上，单个Redis服务器会发生单点故障，并且一台服务器需要处理所有的请求负载，压力较 大；</p>
+<p>  从容量上，单个Redis服务器内存容量有限，就算一台Redis服务器内存容量为256G，也不能将所有 内存用作Redis存储内存，一般来说，单台Redis最大使用内存不应该超过20G。 电商网站上的商品，一般都是一次上传，无数次浏览的，说专业点也就是”多读少写”。</p>
+<p>主从复制，读写分离！80% 的情况下都是在进程读操作！减缓服务器的压力！<br>架构中经常使用！ 一主 二从！（最低配）</p>
+<p>只要在公司中，主从复制就是必须要使用的，因为在真实的项目中不可能单机使用Redis！</p>
+<p>环境配置</p>
+<p>只配从库，不配置主库！</p>
+<p>[root@localhost bin]# .&#x2F;redis-cli<br>127.0.0.1:6379&gt; info replication #查看当前库的信息</p>
+<h1 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h1><p>role:master #角色：master<br>connected_slaves:0 #没有从机<br>master_replid:76cfb7376506413b4d6dd71f6da24afc8a61dedc<br>master_replid2:0000000000000000000000000000000000000000<br>master_repl_offset:0<br>second_repl_offset:-1<br>repl_backlog_active:0<br>repl_backlog_size:1048576<br>repl_backlog_first_byte_offset:0<br>repl_backlog_histlen:0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>主机：6379</p>
+<p>1、端口<br>2、pid 名字<br>3、log文件名字<br>4、dump.rdb 名字<br>1<br>2<br>3<br>4</p>
+<p>从机：6380</p>
+<p>从机：6381</p>
+<p>启动</p>
+<p>默认情况下三台都是主机<br>默认情况下，每台Redis 服务器都是主节点；一般情况下只用配置从机就好了认老大！</p>
+<p>配置一主二从</p>
+<p>将6379这台机子设置为从机<br>就是找谁当自己的老大<br>slaveof</p>
+<p>将6381这台机子设置为从机</p>
+<p>查看主机的配置</p>
+<p>真实的主从配置应该在配置文件中配置，这样的话是永久的，这里使用的是命令，暂时的！</p>
+<p>细节<br>  1.主机可以写，从机不能写只能读！<br>  2.主机中的所有信息和数据，都自动被从机保存！</p>
+<p>从机只能写</p>
+<p>测试：主机断开连接，从机依旧连接到主机的，但是没有写操作，这个时候，主机如果回来了，从机依 旧可以直接获取到主机写的信息！</p>
+<p>如果是使用命令行，来配置的主从，这个时候如果重启了，就会变回主机！只要变为从机，立马就会从 主机中获取值！</p>
+<p>复制原理<br>Slave 启动成功连接到 master 后会发送一个sync同步命令</p>
+<p>Master 接到命令，启动后台的存盘进程，同时收集所有接收到的用于修改数据集命令，在后台进程执行 完毕之后，master将传送整个数据文件到slave，并完成一次完全同步。</p>
+<p>全量复制：而slave服务在接收到数据库文件数据后，将其存盘并加载到内存中。</p>
+<p>增量复制：Master 继续将新的所有收集到的修改命令依次传给slave，完成同步</p>
+<p>但是只要是重新连接master，一次完全同步（全量复制）将被自动执行！ 我们的数据一定可以在从机中 看到！</p>
+<p>第二种模型：层层链路</p>
+<p>  这是时候也能完成主从复制，6380 即6379的 从节点，也是6381的主节点，但是该节点无法完成写入的。</p>
+<p>如果没有老大了（主节点挂了），这个时候能不能选择一个老大出来呢？哨兵模式没出来之前，都是需要手动配置的</p>
+<p>  谋朝篡位</p>
+<p>  如果主机断开了连接，可以使用 slaveof no one 让自己变成主机！其他的节点就可以手动连接到最新的这个主节点（手动）</p>
+<p>如果这个时候老大修复了，只能重新配置</p>
+<p>  好比谋朝篡位，皇帝下台了，你再回来你也做不了老大了</p>
+<p>以下6380 重新认6379为老大</p>
+<p>哨兵模式<br>（自动选举老大）</p>
+<p>15.2Redis集群–哨兵模式<br>概念：<br>  主从切换技术的方法是：当主服务器宕机后，需要手动把一台从服务器切换为主服务器，这就需要人工 干预，费事费力，还会造成一段时间内服务不可用。这不是一种推荐的方式，更多时候，我们优先考虑 哨兵模式。Redis从2.8开始正式提供了Sentinel（哨兵） 架构来解决这个问题。</p>
+<p>  谋朝篡位的自动版，能够后台监控主机是否故障，如果故障了根据投票数自动将从库转换为主库。</p>
+<p>  哨兵模式是一种特殊的模式，首先Redis提供了哨兵的命令，哨兵是一个独立的进程，作为进程，它会独立运行。其原理是哨兵通过发送命令，等待Redis服务器响应，从而监控运行的多个Redis实例。</p>
+<p>这里的哨兵有两个作用</p>
+<p>通过发送命令，让Redis服务器返回监控其运行状态，包括主服务器和从服务器。<br>当哨兵监测到master宕机，会自动将slave切换成master，然后通过发布订阅模式通知其他的从服 务器，修改配置文件，让它们切换主机。<br>  然而一个哨兵进程对Redis服务器进行监控，可能会出现问题，为此，我们可以使用多个哨兵进行监控。 各个哨兵之间还会进行监控，这样就形成了多哨兵模式。</p>
+<p>  假设主服务器宕机，哨兵1先检测到这个结果，系统并不会马上进行failover过程，仅仅是哨兵1主观的认 为主服务器不可用，这个现象成为主观下线。当后面的哨兵也检测到主服务器不可用，并且数量达到一 定值时，那么哨兵之间就会进行一次投票，投票的结果由一个哨兵发起，进行failover[故障转移]操作。 切换成功后，就会通过发布订阅模式，让各个哨兵把自己监控的从服务器实现切换主机，这个过程称为 客观下线。</p>
+<p>测试：<br>  配置一主二从！</p>
+<p>1.配置哨兵配置文件<br>加粗样式名称不能错，sentinel.conf<br>monitor #被监控的名称</p>
+<p>127.0.0.1 #host<br>6379 #端口号port<br>1 #代表主机挂了，slave 投票看让谁接替成为主机，票数最多的就会成为主机<br>sentinel monitor myredis 127.0.0.1 6379 1<br>1<br>2<br>3<br>4</p>
+<p>2.启动哨兵</p>
+<p>3.测试主机蹦了<br>关闭主机 6379</p>
+<p>查看6380<br>1<br>自动转为主机</p>
+<p>查看6381<br>自动认6380为新的老大</p>
+<p>结论：<br>  如果master 节点断开了，这个时候就会从 从机中随机选择一个服务器（这里面有一个投票算法）</p>
+<p>  这个时候6379再回来也没有用了，它是个光杆司令了，如果还想做老大需要手动配置！<br>如果6379 回来了，它也只能做从机。（你回来了，只能当我的手下）</p>
+<p>  如果主机此时回来了，只能归并到新的主机下，当做从机，这就是哨兵模式的规则！</p>
+<p>哨兵模式优点：</p>
+<p>哨兵模式集群，基于主从复制模式，所有的主从配置优点，它全有<br>主从可以切换，故障可以转移，系统的可用性就会更好<br>哨兵模式就是主从复制的升级，手动到自动，更加健壮<br>哨兵模式缺点：</p>
+<p>Redis 不好在线扩容，集群容量一旦到达上限，在线扩容就十分麻烦！<br>实现哨兵模式的配置是非常麻烦的，里面有很多配置<br>哨兵模式的全部配置</p>
+<h1 id="Example-sentinel-conf"><a href="#Example-sentinel-conf" class="headerlink" title="Example sentinel.conf"></a>Example sentinel.conf</h1><h1 id="哨兵sentinel实例运行的端口-默认26379"><a href="#哨兵sentinel实例运行的端口-默认26379" class="headerlink" title="哨兵sentinel实例运行的端口 默认26379"></a>哨兵sentinel实例运行的端口 默认26379</h1><p>port 26379</p>
+<h1 id="哨兵sentinel的工作目录"><a href="#哨兵sentinel的工作目录" class="headerlink" title="哨兵sentinel的工作目录"></a>哨兵sentinel的工作目录</h1><p>dir &#x2F;tmp</p>
+<p>#哨兵sentinel监控的redis主节点的 ip port</p>
+<h1 id="master-name-可以自己命名的主节点名字-只能由字母A-z、数字0-9-、"><a href="#master-name-可以自己命名的主节点名字-只能由字母A-z、数字0-9-、" class="headerlink" title="master-name 可以自己命名的主节点名字 只能由字母A-z、数字0-9 、"></a>master-name 可以自己命名的主节点名字 只能由字母A-z、数字0-9 、</h1><p>这三个字符”.-_”组成。</p>
+<h1 id="quorum-配置多少个sentinel哨兵统一认为master主节点失联-那么"><a href="#quorum-配置多少个sentinel哨兵统一认为master主节点失联-那么" class="headerlink" title="quorum 配置多少个sentinel哨兵统一认为master主节点失联 那么"></a>quorum 配置多少个sentinel哨兵统一认为master主节点失联 那么</h1><p>这时客观上认为主节点失联了<br>sentinel monitor mymaster 127.0.0.1 6379 2</p>
+<h1 id="当在Redis实例中开启了requirepass-foobared-授权密码-这样所有连接Redis实例的"><a href="#当在Redis实例中开启了requirepass-foobared-授权密码-这样所有连接Redis实例的" class="headerlink" title="当在Redis实例中开启了requirepass foobared 授权密码 这样所有连接Redis实例的"></a>当在Redis实例中开启了requirepass foobared 授权密码 这样所有连接Redis实例的</h1><p>客户端都要提供 密码</p>
+<h1 id="设置哨兵sentinel-连接主从的密码-注意必须为主从设置一样的验证密码"><a href="#设置哨兵sentinel-连接主从的密码-注意必须为主从设置一样的验证密码" class="headerlink" title="设置哨兵sentinel 连接主从的密码 注意必须为主从设置一样的验证密码"></a>设置哨兵sentinel 连接主从的密码 注意必须为主从设置一样的验证密码</h1><p>sentinel auth-pass mymaster MySUPER–secret-0123passw0rd</p>
+<h1 id="指定多少毫秒之后-主节点没有应答哨兵sentinel"><a href="#指定多少毫秒之后-主节点没有应答哨兵sentinel" class="headerlink" title="指定多少毫秒之后 主节点没有应答哨兵sentinel"></a>指定多少毫秒之后 主节点没有应答哨兵sentinel</h1><p>此时 哨兵主观上认为主节点下线 默认30秒<br>sentinel down-after-milliseconds mymaster 30000</p>
+<h1 id="这个配置项指定了在发生failover主备切换时最多可以有多少个slave同时对新的master"><a href="#这个配置项指定了在发生failover主备切换时最多可以有多少个slave同时对新的master" class="headerlink" title="这个配置项指定了在发生failover主备切换时最多可以有多少个slave同时对新的master"></a>这个配置项指定了在发生failover主备切换时最多可以有多少个slave同时对新的master</h1><p>进行 同步， 这个数字越小，完成failover所需的时间就越长， 但是如果这个数字越大，<br>就意味着越 多的slave因为replication而不可用。<br>可以通过将这个值设为 1 来保证每次只有一个slave 处于不能处理命令请求的状态。<br>sentinel parallel-syncs mymaster 1</p>
+<h1 id="故障转移的超时时间-failover-timeout-可以用在以下这些方面："><a href="#故障转移的超时时间-failover-timeout-可以用在以下这些方面：" class="headerlink" title="故障转移的超时时间 failover-timeout 可以用在以下这些方面："></a>故障转移的超时时间 failover-timeout 可以用在以下这些方面：</h1><p>#1. 同一个sentinel对同一个master两次failover之间的间隔时间。<br>#2. 当一个slave从一个错误的master那里同步数据开始计算时间。直到slave被纠正为向<br>正确的master那 里同步数据时。<br>#3.当想要取消一个正在进行的failover所需要的时间。<br>#4.当进行failover时，配置所有slaves指向新的master所需的最大时间。不过，即使过了<br>这个超时， slaves依然会被正确配置为指向master，但是就不按parallel-syncs所配置的<br>规则来了</p>
+<h1 id="默认三分钟"><a href="#默认三分钟" class="headerlink" title="默认三分钟"></a>默认三分钟</h1><p>sentinel failover-timeout mymaster 180000</p>
+<h1 id="SCRIPTS-EXECUTION"><a href="#SCRIPTS-EXECUTION" class="headerlink" title="SCRIPTS EXECUTION"></a>SCRIPTS EXECUTION</h1><p>#配置当某一事件发生时所需要执行的脚本，可以通过脚本来通知管理员，<br>例如当系统运行不正常时发邮件通知 相关人员。<br>#对于脚本的运行结果有以下规则：<br>#若脚本执行后返回1，那么该脚本稍后将会被再次执行，重复次数目前默认为10<br>#若脚本执行后返回2，或者比2更高的一个返回值，脚本将不会重复执行。<br>#如果脚本在执行过程中由于收到系统中断信号被终止了，则同返回值为1时的行为相同。<br>#一个脚本的最大执行时间为60s，如果超过这个时间，脚本将会被一个SIGKILL信号终止，之<br>后重新执行。</p>
+<p>#通知型脚本:当sentinel有任何警告级别的事件发生时（比如说redis实例的主观失效和客观<br>失效等等）， 将会去调用这个脚本，这时这个脚本应该通过邮件，SMS等方式去通知系统管理<br>员关于系统不正常运行的信 息。调用该脚本时，将传给脚本两个参数，一个是事件的类型，<br>一个是事件的描述。如果sentinel.conf配 置文件中配置了这个脚本路径，那么必须保证这<br>个脚本存在于这个路径，并且是可执行的，否则sentinel无 法正常启动成功。<br>#通知脚本</p>
+<h1 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h1><p>sentinel notification-script mymaster &#x2F;var&#x2F;redis&#x2F;notify.sh</p>
+<h1 id="客户端重新配置主节点参数脚本"><a href="#客户端重新配置主节点参数脚本" class="headerlink" title="客户端重新配置主节点参数脚本"></a>客户端重新配置主节点参数脚本</h1><h1 id="当一个master由于failover而发生改变时，这个脚本将会被调用，通知相关的客户端"><a href="#当一个master由于failover而发生改变时，这个脚本将会被调用，通知相关的客户端" class="headerlink" title="当一个master由于failover而发生改变时，这个脚本将会被调用，通知相关的客户端"></a>当一个master由于failover而发生改变时，这个脚本将会被调用，通知相关的客户端</h1><p>关于master地址已 经发生改变的信息。</p>
+<h1 id="以下参数将会在调用脚本时传给脚本"><a href="#以下参数将会在调用脚本时传给脚本" class="headerlink" title="以下参数将会在调用脚本时传给脚本:"></a>以下参数将会在调用脚本时传给脚本:</h1><h1 id="目前总是“failover”"><a href="#目前总是“failover”" class="headerlink" title="# 目前总是“failover”,"></a># 目前总是“failover”,</h1><h1 id="是“leader”或者“observer”中的一个。"><a href="#是“leader”或者“observer”中的一个。" class="headerlink" title="是“leader”或者“observer”中的一个。"></a>是“leader”或者“observer”中的一个。</h1><h1 id="参数-from-ip-from-port-to-ip-to-port是用来和旧的master和新的master-即旧"><a href="#参数-from-ip-from-port-to-ip-to-port是用来和旧的master和新的master-即旧" class="headerlink" title="参数 from-ip, from-port, to-ip, to-port是用来和旧的master和新的master(即旧"></a>参数 from-ip, from-port, to-ip, to-port是用来和旧的master和新的master(即旧</h1><p>的slave)通 信的</p>
+<h1 id="这个脚本应该是通用的，能被多次调用，不是针对性的。"><a href="#这个脚本应该是通用的，能被多次调用，不是针对性的。" class="headerlink" title="这个脚本应该是通用的，能被多次调用，不是针对性的。"></a>这个脚本应该是通用的，能被多次调用，不是针对性的。</h1><p>sentinel client-reconfig-script mymaster &#x2F;var&#x2F;redis&#x2F;reconfig.sh</p>
+<h1 id="一般都是由运维来配置！"><a href="#一般都是由运维来配置！" class="headerlink" title="一般都是由运维来配置！"></a>一般都是由运维来配置！</h1><p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70<br>71<br>72<br>73<br>74<br>75<br>76<br>77<br>78<br>79<br>80<br>81<br>社会目前程序员饱和（初级和中级）、高级程序员是重金难求的！提升自己</p>
+<p>16、Redis缓存穿透和雪崩<br>  Redis缓存的使用，极大的提升了应用程序的性能和效率，特别是数据查询方面。但同时，它也带来了一 些问题。其中，最要害的问题，就是数据的一致性问题，从严格意义上讲，这个问题无解。如果对数据 的一致性要求很高，那么就不能使用缓存。<br>  另外的一些典型问题就是，缓存穿透、缓存雪崩和缓存击穿。目前，业界也都有比较流行的解决方案。</p>
+<p>缓存穿透</p>
+<p>概念<br>  缓存穿透的概念很简单，用户想要查询一个数据，发现redis内存数据库没有，也就是缓存没有命中，于 是向持久层数据库查询。发现也没有，于是本次查询失败。当用户很多的时候，缓存都没有命中（秒 杀！），于是都去请求了持久层数据库。这会给持久层数据库造成很大的压力，这时候就相当于出现了 缓存穿透。</p>
+<p>解决方案</p>
+<p>布隆过滤器<br>  布隆过滤器是一种数据结构，对所有可能查询的参数以hash形式存储，在控制层先进行校验，不符合则 丢弃，从而避免了对底层存储系统的查询压力；</p>
+<p>缓存空对象<br>  当存储层不命中后，即使返回的空对象也将其缓存起来，同时会设置一个过期时间，之后再访问这个数 据将会从缓存中获取，保护了后端数据源；</p>
+<p>但是这种方法会存在两个问题：<br>  1、如果空值能够被缓存起来，这就意味着缓存需要更多的空间存储更多的键，因为这当中可能会有很多 的空值的键；</p>
+<p>  2、即使对空值设置了过期时间，还是会存在缓存层和存储层的数据会有一段时间窗口的不一致，这对于 需要保持一致性的业务会有影响。</p>
+<p>缓存击穿（量太大，缓存过期！）<br>  这里需要注意和缓存击穿的区别，缓存击穿，是指一个key非常热点，在不停的扛着大并发，大并发集中 对这一个点进行访问，当这个key在失效的瞬间，持续的大并发就穿破缓存，直接请求数据库，就像在一 个屏障上凿开了一个洞。<br>  当某个key在过期的瞬间，有大量的请求并发访问，这类数据一般是热点数据，由于缓存过期，会同时访 问数据库来查询最新数据，并且回写缓存，会导使数据库瞬间压力过大。</p>
+<p>1.设置热点数据永不过期<br>  从缓存层面来看，没有设置过期时间，所以不会出现热点 key 过期后产生的问题。</p>
+<p>2.加互斥锁<br>  分布式锁：使用分布式锁，保证对于每个key同时只有一个线程去查询后端服务，其他线程没有获得分布 式锁的权限，因此只需要等待即可。这种方式将高并发的压力转移到了分布式锁，因此对分布式锁的考 验很大。</p>
+<p>缓存雪崩<br>  缓存雪崩，是指在某一个时间段，缓存集中过期失效。Redis 宕机！</p>
+<p>  产生雪崩的原因之一，比如在写本文的时候，马上就要到双十二零点，很快就会迎来一波抢购，这波商 品时间比较集中的放入了缓存，假设缓存一个小时。那么到了凌晨一点钟的时候，这批商品的缓存就都过期了。而对这批商品的访问查询，都落到了数据库上，对于数据库而言，就会产生周期性的压力波峰。于是所有的请求都会达到存储层，存储层的调用量会暴增，造成存储层也会挂掉的情况。</p>
+<p>  其实集中过期，倒不是非常致命，比较致命的缓存雪崩，是缓存服务器某个节点宕机或断网。因为自然 形成的缓存雪崩，一定是在某个时间段集中创建缓存，这个时候，数据库也是可以顶住压力的。无非就 是对数据库产生周期性的压力而已。而缓存服务节点的宕机，对数据库服务器造成的压力是不可预知 的，很有可能瞬间就把数据库压垮。</p>
+<p>解决方案</p>
+<p>1.redis高可用<br>  这个思想的含义是，既然redis有可能挂掉，那我多增设几台redis，这样一台挂掉之后其他的还可以继续 工作，其实就是搭建的集群。（异地多活！）</p>
+<p>2.限流降级（在SpringCloud讲解过！）<br>  这个解决方案的思想是，在缓存失效后，通过加锁或者队列来控制读数据库写缓存的线程数量。比如对 某个key只允许一个线程查询数据和写缓存，其他线程等待。</p>
+<p>3.数据预热<br>  数据加热的含义就是在正式部署之前，我先把可能的数据先预先访问一遍，这样部分可能大量访问的数 据就会加载到缓存中。在即将发生大并发访问前手动触发加载缓存不同的key，设置不同的过期时间，让 缓存失效的时间点尽量均匀。</p>
+<p>双十一：停掉一些服务，（保证主要的服务可用）</p>
+<p>总结<br>五大数据类型<br>java操作jedis<br>持久化<br>主从复制<br>缓存雪崩和缓存穿透</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis</div>
+      <div>https://lfrok.top/2022/11/27/Java/Redis/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>B612🚀</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月27日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/SpringMVC/" title="SpringMVC">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SpringMVC</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/27/Java/%E9%9B%86%E5%90%88/" title="ArrayList">
+                        <span class="hidden-mobile">ArrayList</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="lv-container" data-id="city" data-uid="MTAyMC8zODU3Mi8xNTEwMA==">
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#lv-container', function() {
+        Fluid.utils.createScript('https://cdn-city.livere.com/js/embed.dist.js');
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Fork</span></a> <strong><i style= color:red>☭ </i></strong> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>B-612</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
