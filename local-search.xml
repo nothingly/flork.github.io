@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>写在年末</title>
+    <link href="/2022/12/31/%E9%9A%8F%E6%83%B3/%E5%86%99%E5%9C%A8%E5%B9%B4%E6%9C%AB/"/>
+    <url>/2022/12/31/%E9%9A%8F%E6%83%B3/%E5%86%99%E5%9C%A8%E5%B9%B4%E6%9C%AB/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script>    <div id="aplayer-GZEwGDgn" class="aplayer aplayer-tag-marker meting-tag-marker"         data-id="478507889" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme=" #1da496"    ></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>随想</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>我的计划</title>
     <link href="/2022/11/30/%E8%AE%A1%E5%88%92/%E6%88%91%E7%9A%84%E8%AE%A1%E5%88%92/"/>
     <url>/2022/11/30/%E8%AE%A1%E5%88%92/%E6%88%91%E7%9A%84%E8%AE%A1%E5%88%92/</url>
@@ -791,6 +810,31 @@
     <tags>
       
       <tag>Java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2022-12-1</title>
+    <link href="/2022/11/27/schedule/2022-12-1/"/>
+    <url>/2022/11/27/schedule/2022-12-1/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h5 id="天行健，君子以自强不息"><a href="#天行健，君子以自强不息" class="headerlink" title="天行健，君子以自强不息"></a><em><strong>天行健，</strong></em><em><strong>君子以自强不息</strong></em></h5><ol><li>回顾数据库框架Mybatis，准备面试题</li><li>观看狂神说视频</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>schedule</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>task</tag>
       
     </tags>
     
